@@ -5,4 +5,3 @@ import datetime
 
 def get_path():
     return os.getcwd()
-sb
