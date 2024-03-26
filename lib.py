@@ -8,7 +8,7 @@ def get_path():
 
 def set_char(char, x, y, font_size, color):
     cwd = get_path()
-    font = pygame.font.Font(f"{cwd}/resource/VonwaonBitmap-12px.ttf", font_size)
+    font = pygame.font.Font(f"{cwd}/VonwaonBitmap-12px.ttf", font_size)
     text = font.render(char, True, color)
     return text, text.get_rect(center=(x, y))
 
