@@ -17,4 +17,5 @@ while running != False:
 
     screen.fill((255, 255, 255))
     print_text(screen, "AFK Game", 400, 300, 50, (0, 0, 0))
+    print_text(screen, "Dumb ass pophaha137", 400, 350, 20, (0, 0, 0))
     pygame.display.flip()

@@ -15,3 +15,4 @@ def set_char(char, x, y, font_size, color):
 def print_text(screen, text, x, y, font_size, color):
     rendered_text, text_rect = set_char(text, x, y, font_size, color)
     screen.blit(rendered_text, text_rect)
+
