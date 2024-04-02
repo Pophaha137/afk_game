@@ -1,16 +1,21 @@
-# This is a sample Python script.
+import pygame
+import sys
+import os
+from lib import *
+from button import Button
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("AFK Game")
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+running = True
+while running != False:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    screen.fill((255, 255, 255))
+    print_text(screen, "AFK Game", 400, 300, 50, (0, 0, 0))
+    print_text(screen, "Dumb ass pophaha137", 400, 350, 20, (0, 0, 0))
+    pygame.display.flip()
