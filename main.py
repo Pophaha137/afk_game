@@ -14,7 +14,7 @@ surfont = pygame.font.Font("./VonwaonBitmap-12px.ttf",80)
 stbtnN = pygame.transform.scale(pygame.image.load("./resource/background/button/stBtnN.png").convert_alpha(),(200,50))
 stbtnD = pygame.transform.scale(pygame.image.load("./resource/background/button/stBtnD.png").convert_alpha(),(200,50))
 #button
-stbtn = TButton(400,350," ",stbtnN,stbtnD,None,None,surfont,(0,0,0))
+stbtn = TButton(300,350," ",stbtnN,stbtnD,None,None,surfont,(0,0,0))
 
 
 running = True
