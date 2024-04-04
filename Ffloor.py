@@ -3,6 +3,9 @@ import sys
 from Textbutton import TButton
 from function import *
 def FirstfFloor(surface):
+    #screen size
+    w=1280
+    h=800
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
     cruciblei = pygame.transform.scale(pygame.image.load("./resource/function/crucible.png").convert_alpha(),(200,200))
@@ -14,10 +17,10 @@ def FirstfFloor(surface):
 
     #button
     crucible = TButton(0, 100," ", cruciblei, cruciblei, None,None, font,(0,0,0))
-    forge = TButton(400, 0," ", forgei, forgei, None, None, font, (0,0,0))
-    head = TButton(0, 450," ", headi, headi, None, None, font, (0,0,0))
-    door = TButton(500, 400, " ", doori, doori, None, None,font, (0,0,0))
-    stairs = TButton(650, 400, " ", stairsi, stairsi, None, None,font, (0,0,0))
+    forge = TButton(w/3*2, 0," ", forgei, forgei, None, None, font, (0,0,0))
+    head = TButton(0, h-150," ", headi, headi, None, None, font, (0,0,0))
+    door = TButton(500, h-200, " ", doori, doori, None, None,font, (0,0,0))
+    stairs = TButton(w-150, h-200, " ", stairsi, stairsi, None, None,font, (0,0,0))
 
     #main
     running = True
@@ -51,5 +54,9 @@ def FirstfFloor(surface):
             head.draw(surface)
             door.draw(surface)
             stairs.draw(surface)
-            surface.blit(bloodi,(100,500))
+            surface.blit(bloodi,(100,h-100))
         pygame.display.flip()
+pygame.init()
+screen = pygame.display.set_mode((1280, 800))
+if __name__ == '__main__':
+    FirstfFloor(screen)
