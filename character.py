@@ -12,7 +12,7 @@ class character:
         self.y = y
         self.jewelry = Jewelry
         self.damage_type = None
-        self.attack_hurt = None
+        self.base_damage = None
        
         if Weapon != None:
             self.weapon_damage = Weapon.damage
@@ -27,16 +27,16 @@ class character:
 
     
     def damage_type_func(self):
-        if self.weapon_type == "close combat":
+        if self.weapon_type == "melee":
             return "physical"
-        elif self.weapon_type == "long-range attack":
+        elif self.weapon_type == "ranged":
             return "physical"
         elif self.weapon_type == "magic":
             return "magical"
         else:
             return "physical"
         
-    def attack_hurt_func(self):
+    def base_damage_func(self):
         if self.damage_type == "magical":
             return self.intelligence + self.weapon_damage
         else:
@@ -45,9 +45,9 @@ class character:
     def critical_damage(self): 
         if random.randint(1, 100) >= self.luck:
             # 暴击发生，伤害值增加
-            return self.attack_hurt * self.critical_damage_percentage
+            return self.base_damage * self.critical_damage_percentage
         else:
             # 未发生暴击，返回基础伤害
-            return self.attack_hurt
+            return self.base_damage
         
 
