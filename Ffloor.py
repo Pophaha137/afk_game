@@ -1,7 +1,10 @@
 import pygame
 import sys
 from Textbutton import TButton
+from backpack import backpack
 from function import *
+def a():
+    print("1")
 def FirstfFloor(surface):
     #screen size
     w=1280
@@ -18,11 +21,10 @@ def FirstfFloor(surface):
     #button
     crucible = TButton(0, 100," ", cruciblei, cruciblei, None,None, font,(0,0,0))
     forge = TButton(w/3*2, 0," ", forgei, forgei, None, None, font, (0,0,0))
-    head = TButton(0, h-150," ", headi, headi, None, None, font, (0,0,0))
+    head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
     door = TButton(500, h-200, " ", doori, doori, None, None,font, (0,0,0))
     stairs = TButton(w-150, h-200, " ", stairsi, stairsi, None, None,font, (0,0,0))
 
-    #main
     running = True
     while running:
         mx, my = pygame.mouse.get_pos()
@@ -36,7 +38,7 @@ def FirstfFloor(surface):
                 door.getFocus(mx,my)
                 stairs.getFocus(mx,my)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed()[0]:
+                if pygame.mouse.get_pressed() == (1,0,0):
                     crucible.mouseDown(mx,my)
                     forge.mouseDown(mx,my)
                     head.mouseDown(mx,my)
@@ -45,9 +47,9 @@ def FirstfFloor(surface):
             elif event.type == pygame.MOUSEBUTTONUP:
                 crucible.mouseUp(mx,my)
                 forge.mouseUp(mx,my)
-                head.mouseDown(mx,my)
-                door.mouseDown(mx,my)
-                stairs.mouseDown(mx,my)
+                head.mouseUp(mx,my)
+                door.mouseUp(mx,my)
+                stairs.mouseUp(mx,my)
             surface.fill((255,255,255))
             crucible.draw(surface)
             forge.draw(surface)
@@ -56,7 +58,7 @@ def FirstfFloor(surface):
             stairs.draw(surface)
             surface.blit(bloodi,(100,h-100))
         pygame.display.flip()
-pygame.init()
+
 screen = pygame.display.set_mode((1280, 800))
 if __name__ == '__main__':
     FirstfFloor(screen)
