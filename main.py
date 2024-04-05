@@ -12,6 +12,7 @@ h=800
 pygame.init()
 screen = pygame.display.set_mode((w, h))
 pygame.display.set_caption("Adventurer Simulator")
+#state
 #font
 font = pygame.font.Font("./VonwaonBitmap-12px.ttf",80)
 def Surface(surface):
