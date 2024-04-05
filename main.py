@@ -13,6 +13,7 @@ pygame.init()
 screen = pygame.display.set_mode((w, h))
 pygame.display.set_caption("Adventurer Simulator")
 #state
+current_state = "surface"
 #font
 font = pygame.font.Font("./VonwaonBitmap-12px.ttf",80)
 def Surface(surface):
@@ -30,16 +31,17 @@ def Surface(surface):
             mx,my = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.MOUSEMOTION:
-                stbtn.getFocus(mx,my)
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed()==(1,0,0):
-                    stbtn.mouseDown(mx,my)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                stbtn.mouseUp(mx,my)
-            screen.fill((255, 255, 255))
-            stbtn.draw(screen)
-        surface.blit(surTitle,(w/2-surTitle.get_width()/2,h/3))
+            if current_state == "surface":
+                if event.type == pygame.MOUSEMOTION:
+                    stbtn.getFocus(mx,my)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.mouse.get_pressed()==(1,0,0):
+                        stbtn.mouseDown(mx,my)
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    stbtn.mouseUp(mx,my)
+                screen.fill((255, 255, 255))
+                stbtn.draw(screen)
+                surface.blit(surTitle,(w/2-surTitle.get_width()/2,h/3))
         pygame.display.flip()
 
 if __name__ == '__main__':

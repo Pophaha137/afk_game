@@ -2,10 +2,7 @@ import pygame
 import sys
 from Textbutton import TButton
 from backpack import backpack
-from itembox import window
 from function import *
-def a():
-    print("1")
 def FirstfFloor(surface):
     #screen size
     w=1280
