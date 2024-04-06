@@ -2,21 +2,15 @@ import pygame
 from Textbutton import TButton
 from function import *
 
-a=1
-def b():
-    global a
-    a=0
-    return a
-
 def backpack(surface):
-    global a
+    from Ffloor import FirstfFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"),(50,50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"),(50,50))
     pakage = pygame.transform.scale(pygame.image.load("./resource/character/characterbackground.png"),(1280,800))
     #button
-    esc = TButton(1230,0, " ", crossN, crossN,crossD,a, font,(0,0,0))
+    esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstfFloor, font,(0,0,0))
     running = True
     while running:
         for event in pygame.event.get():
@@ -33,8 +27,6 @@ def backpack(surface):
             surface.blit(pakage,(0,0))
             esc.draw(screen)
         pygame.display.flip()
-        if a == 0:
-            return 0
 
 
 pygame.init()
