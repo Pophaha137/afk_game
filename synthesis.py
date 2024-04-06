@@ -1,39 +1,35 @@
 import pygame
-from pygame.locals import *
+from Textbutton import TButton
+from function import *
 
-# 初始化Pygame
+def synthesis(surface):
+    from Ffloor import FirstfFloor
+    font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
+    #image import
+    crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"),(50,50))
+    crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"),(50,50))
+    synthesis = pygame.transform.scale(pygame.image.load("./resource/character/UI.png"),(1280,800))
+    #button
+    esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstfFloor, font,(0,0,0))
+    running = True
+    while running:
+        for event in pygame.event.get():
+            mx,my = pygame.mouse.get_pos()
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEMOTION:
+                esc.getFocus(mx,my)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    esc.mouseDown(mx,my)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                esc.mouseUp(mx,my)
+            surface.blit(synthesis,(0,0))
+            esc.draw(screen)
+        pygame.display.flip()
+
+
 pygame.init()
-
-# 创建第一个窗口
-window1 = pygame.display.set_mode((400, 300))
-pygame.display.set_caption("Window 1")
-
-# 创建第二个窗口
-window2 = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Window 2")
-
-# 游戏循环
-running = True
-while running:
-    # 在每个窗口上绘制内容
-    window1.fill((255, 255, 255))
-    window2.fill((0, 0, 0))
-
-    # 处理窗口1的事件
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
-        elif event.type == KEYDOWN and event.key == K_SPACE:
-            pygame.display.set_caption("Window 1: Space key pressed")
-
-    # 处理窗口2的事件
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
-        elif event.type == KEYDOWN and event.key == K_RETURN:
-            pygame.display.set_caption("Window 2: Return key pressed")
-
-    pygame.display.update()
-
-# 退出Pygame
-pygame.quit()
+screen = pygame.display.set_mode((1280, 800))
+if __name__ == '__main__':
+    synthesis(screen)
