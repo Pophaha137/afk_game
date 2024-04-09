@@ -5,7 +5,7 @@ class character:
     def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry = None, Weapon = None , Armor = None):
         self.lv = Lv
         self.exp = Exp
-        self.exp_needed = 10**self.lv
+        self.exp_needed = 10*1.1**self.lv
         self.hp = HP
         self.intelligence = Intelligence
         self.strength = Strength
