@@ -44,7 +44,7 @@ class character:
             self.lv += 1
             self.exp -= self.exp_needed
             #升级加点
-            self.lv_up_regard()
+            self.lv_up_reward()
         else:
             pass
     
