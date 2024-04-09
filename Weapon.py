@@ -8,3 +8,6 @@ class Weapon:
 
     def __str__(self):
         return f"{self.name} ({self.type}) - {self.damage} {self.attribute} damage, {self.critical_damage_percentage}% critical damage"
+    
+
+sword1 = Weapon("God_bless", 10, "light", "sword", 1.5)
