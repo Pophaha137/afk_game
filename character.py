@@ -1,4 +1,5 @@
 import random
+from jewelry import jew
 
 class character:
     def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry = None, Weapon = None , Armor = None):
