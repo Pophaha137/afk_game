@@ -33,32 +33,11 @@ class character:
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
 
-    #伤害类型判断
-    def damage_type_func(self):
-        if self.weapon_type == "melee":
-            return "physical"
-        elif self.weapon_type == "ranged":
-            return "physical"
-        elif self.weapon_type == "magic":
-            return "magical"
-        else:
-            return "physical"
-        
-    #基础伤害值    
-    def base_damage_func(self):
-        if self.damage_type == "magical":
-            return self.intelligence + self.weapon_damage
-        else:
-            return self.strength + self.weapon_damage
-
-    #暴击伤害判断    
-    def critical_damage(self): 
-        if random.randint(1, 100) >= self.luck:
-            # 暴击发生，伤害值增加
-            return self.base_damage * self.critical_damage_percentage
-        else:
-            # 未发生暴击，返回基础伤害
-            return self.base_damage
+    #养成类
+    
+    #经验条增加
+    def exp_add(self, exp):
+        self.exp += exp
         
     #升级函数    
     def level_update(self):
@@ -79,40 +58,6 @@ class character:
         self.speed += 1
         self.luck += 1
         self.exp_needed = 10^self.lv
-
-    #经验条增加
-    def exp_add(self, exp):
-        self.exp += exp
-
-
-    #死亡判断
-    def die_detect(self):
-        if self.hp <= 0:
-            return True
-            #死亡动画并结束战斗
-        else:
-            return False
-            #受伤动画    
-
-    #受伤函数
-    def get_hurt(self, damage, damage_type):
-        if damage_type == "magical":
-            if self.armor_attribute == None:
-                self.hp -= (damage - self.defense)
-            elif self.armor_attribute == "dark":
-                if damage_type == "light":
-                    self.hp -= (damage - self.defense)*1.5
-                else:
-                    self.hp -= (damage - self.defense)*0.8
-            elif self.armor_attribute == "light":
-                if damage_type == "dark":
-                    self.hp -= (damage - self.defense)*1.5
-                else:
-                    self.hp -= (damage - self.defense)*0.8
-        else:
-            self.hp -= (damage - self.defense)
-        self.die_detect()
-    
 
     #血量增加
     def hp_add(self):
@@ -142,3 +87,61 @@ class character:
         self.defense += jewelry.defense_rate
         self.speed += jewelry.speed_rate
         self.luck += jewelry.luck_rate
+
+    #战斗类
+
+        #伤害类型判断
+    def damage_type_func(self):
+        if self.weapon_type == "melee":
+            return "physical"
+        elif self.weapon_type == "ranged":
+            return "physical"
+        elif self.weapon_type == "magic":
+            return "magical"
+        else:
+            return "physical"
+        
+    #基础伤害值    
+    def base_damage_func(self):
+        if self.damage_type == "magical":
+            return self.intelligence + self.weapon_damage
+        else:
+            return self.strength + self.weapon_damage
+
+    #暴击伤害判断    
+    def critical_damage(self): 
+        if random.randint(1, 100) >= self.luck:
+            # 暴击发生，伤害值增加
+            return self.base_damage * self.critical_damage_percentage
+        else:
+            # 未发生暴击，返回基础伤害
+            return self.base_damage
+
+
+    #死亡判断
+    def die_detect(self):
+        if self.hp <= 0:
+            return True
+            #死亡动画并结束战斗
+        else:
+            return False
+            #受伤动画    
+
+    #受伤函数
+    def get_hurt(self, damage, damage_type):
+        if damage_type == "magical":
+            if self.armor_attribute == None:
+                self.hp -= (damage - self.defense)
+            elif self.armor_attribute == "dark":
+                if damage_type == "light":
+                    self.hp -= (damage - self.defense)*1.5
+                else:
+                    self.hp -= (damage - self.defense)*0.8
+            elif self.armor_attribute == "light":
+                if damage_type == "dark":
+                    self.hp -= (damage - self.defense)*1.5
+                else:
+                    self.hp -= (damage - self.defense)*0.8
+        else:
+            self.hp -= (damage - self.defense)
+        self.die_detect()
