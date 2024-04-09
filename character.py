@@ -111,4 +111,26 @@ class character:
         else:
             self.hp -= (damage - self.defense)
         self.die_detect()
-         
+    
+
+    #血量增加
+    def hp_add(self):
+        self.hp += 10
+    
+    #力量增加
+    def strength_add(self):
+        self.strength += 1
+    
+    #智力增加
+    def intelligence_add(self):
+        self.intelligence += 1
+    
+    #防御增加
+    def defense_add(self):
+        self.defense += 1
+    
+    #速度增加
+    def speed_add(self):
+        self.speed += 1
+
+    
