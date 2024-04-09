@@ -133,4 +133,11 @@ class character:
     def speed_add(self):
         self.speed += 1
 
-    
+    #珠宝增益
+    def jewelry(self, jewelry):
+        self.hp += jewelry.hp_rate
+        self.intelligence += jewelry.intelligence_rate
+        self.strength += jewelry.strength_rate
+        self.defense += jewelry.defense_rate
+        self.speed += jewelry.speed_rate
+        self.luck += jewelry.luck_rate
