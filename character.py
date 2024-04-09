@@ -78,7 +78,7 @@ class character:
     def speed_add(self):
         self.speed += 1
 
-    #珠宝增益
+    #珠宝增益???感觉不对
     def jewelry(self, jewelry):
         self.hp += jewelry.hp_rate
         self.intelligence += jewelry.intelligence_rate
@@ -89,7 +89,7 @@ class character:
 
     #战斗类
 
-        #伤害类型判断
+    #伤害类型判断
     def damage_type_func(self):
         if self.weapon_type == "melee":
             return "physical"
@@ -144,6 +144,32 @@ class character:
         else:
             self.hp -= (damage - self.defense)
         self.die_detect()
+
+    #状态类
+    #状态刷新
+    def refresh(self):
+        self.damage_type = self.damage_type_func()
+        self.base_damage = self.base_damage_func()
+
+    #状态显示
+    def show(self):
+        print("Lv:",self.lv)
+        print("Exp:",self.exp)
+        print("HP:",self.hp)
+        print("Intelligence:",self.intelligence)
+        print("Strength:",self.strength)
+        print("Defense:",self.defense + self.armor_defense)
+        print("Speed:",self.speed)
+        print("Luck:",self.luck)
+        print("Weapon_attribute:",self.weapon_attribute)
+        print("Weapon_type:",self.weapon_type)
+        print("Armor_defense:",self.armor_defense)
+        print("Armor_attribute:",self.armor_attribute)
+        print("Base_damage:",self.base_damage)
+        print("Critical_damage_percentage:",self.critical_damage_percentage)
+        print("Jewelry:",self.jewelry)
+
+
 
 
 class enemy:
