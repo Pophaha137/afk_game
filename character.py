@@ -1,5 +1,5 @@
 import random
-from jewelry import jew
+from jewelry import jewelry
 
 class character:
     def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry = None, Weapon = None , Armor = None):
@@ -49,7 +49,7 @@ class character:
             pass
     
     #升级奖励函数
-    def lv_up_regard(self):
+    def lv_up_reward(self):
         self.hp += 10
         self.intelligence += 1
         self.strength += 1
@@ -184,6 +184,8 @@ class enemy:
             return [self.critical_damage(),self.attribute]
         else:
             return [self.critical_damage(),None]
+
+
         
 
 
