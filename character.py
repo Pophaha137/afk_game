@@ -194,6 +194,9 @@ class character:
         print("Critical_damage_percentage:",self.critical_damage_percentage)
         print("Jewelry:",self.jewelry)
 
+    def show_luck(self):
+        return self.luck
+
 
 
 
