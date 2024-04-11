@@ -12,26 +12,30 @@ class character:
         self.defense = Defense
         self.speed = Speed
         self.luck = Luck
+        self.critical_damage_percentage = 1.2
         self.x = x
         self.y = y
         self.jewelry = Jewelry
         self.damage_type = None
         self.base_damage = None
+        self.weapon_critical_damage_percentage = 0
        
         if Weapon != None:
             self.weapon_damage = Weapon.damage
             self.weapon_attribute = Weapon.attribute
             self.weapon_type = Weapon.type
-            self.critical_damage_percentage = Weapon.critical_damage_percentage
+            self.weapon_critical_damage_percentage = Weapon.critical_damage_percentage
         else:
             self.weapon_damage = 0
             self.weapon_attribute = None
             self.weapon_type = None
-            self.critical_damage_percentage = 1.2
+            self.weapon_critical_damage_percentage = 1.2
 
         if Armor != None:
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
+
+
 
     #养成类
     #经验条增加
@@ -87,8 +91,9 @@ class character:
         self.speed += jewelry.speed_rate
         self.luck += jewelry.luck_rate
 
-    #战斗类
 
+
+    #战斗类
     #伤害类型判断
     def damage_type_func(self):
         if self.weapon_type == "melee":
@@ -107,15 +112,16 @@ class character:
         else:
             return self.strength + self.weapon_damage
 
-    #暴击伤害判断    
-    def critical_damage(self): 
+    #暴击伤害判断
+    def critical_damage(self):
         if random.randint(1, 100) >= self.luck:
-            # 暴击发生，伤害值增加
-            return self.base_damage * self.critical_damage_percentage
+            if self.weapon_critical_damage_percentage == 0:
+                return self.base_damage * self.critical_damage_percentage
+            else:
+                return self.base_damage * self.weapon_critical_damage_percentage
         else:
             # 未发生暴击，返回基础伤害
             return self.base_damage
-
 
     #死亡判断
     def die_detect(self):
@@ -144,6 +150,25 @@ class character:
         else:
             self.hp -= (damage - self.defense)
         self.die_detect()
+
+
+
+    #武器类
+    def weapon_on(self, weapon):
+        self.weapon_damage = weapon.damage
+        self.weapon_attribute = weapon.attribute
+        self.weapon_type = weapon.type
+        self.critical_damage_percentage = weapon.critical_damage_percentage
+        self.base_damage = self.base_damage_func()
+
+    def weapon_off(self):
+        self.weapon_damage = 0
+        self.weapon_attribute = None
+        self.weapon_type = None
+        self.critical_damage_percentage = 1.2
+        self.base_damage = self.base_damage_func()
+
+
 
     #状态类
     #状态刷新
