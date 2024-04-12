@@ -21,6 +21,7 @@ class character:
         self.damage_type = None
         self.base_damage = None
         self.weapon_critical_damage_percentage = 0
+        self.temp_hp = self.hp
 
         if Weapon != None:
             self.weapon_damage = Weapon.damage
@@ -36,6 +37,9 @@ class character:
         if Armor != None:
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
+        else:
+            self.armor_defense = 0
+            self.armor_attribute = None
 
     # 养成类
     # 经验条增加
@@ -121,33 +125,52 @@ class character:
         else:
             # 未发生暴击，返回基础伤害
             return self.base_damage
+        
+
+    #伤害输出
+    def damage(self):
+        return self.critical_damage(), self.damage_type, self.weapon_attribute
 
     # 死亡判断
     def die_detect(self):
-        if self.hp <= 0:
+        if self.temp_hp <= 0:
             return True
             # 死亡动画并结束战斗
         else:
             return False
             # 受伤动画
 
-    # 受伤函数
-    def get_hurt(self, damage, damage_type):
-        if damage_type == "magical":
-            if self.armor_attribute == None:
-                self.hp -= (damage - self.defense)
-            elif self.armor_attribute == "dark":
-                if damage_type == "light":
-                    self.hp -= (damage - self.defense) * 1.5
-                else:
-                    self.hp -= (damage - self.defense) * 0.8
-            elif self.armor_attribute == "light":
-                if damage_type == "dark":
-                    self.hp -= (damage - self.defense) * 1.5
-                else:
-                    self.hp -= (damage - self.defense) * 0.8
+    #闪避判断
+    def miss_hit(self):
+        if random.randint(1, 100) <= self.speed:
+            return False
         else:
-            self.hp -= (damage - self.defense)
+            return True
+        
+    #魔法伤害倍率计算
+    def magical_damage(self, attribute):
+        if attribute == "light":
+            if self.armor_attribute == "light":
+                return 0.8
+            elif self.armor_attribute == "dark":
+                return self.base_damage * 1.5
+            else:
+                return 1
+        else:
+            if self.armor_attribute == "dark":
+                return 0.8
+            elif self.armor_attribute == "light":
+                return self.base_damage * 1.5
+            else:
+                return 1
+
+    #受伤函数
+    def get_hurt(self, damage, damage_type, attribute=None):
+        if self.miss_hit() == True:
+            if damage_type == "magical":
+                self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
+        else:
+            self.temp_hp -= (damage - self.defense)
         self.die_detect()
 
     # 武器类
@@ -195,43 +218,70 @@ class character:
 
 
 enemy_name = ["Goblin",  "Skeleton", "Boar", "Light_Fairy", "Dark_Fairy"]
-enemy_hp_base =                     [10, 7, 15, 5, 5]
+enemy_hp_base =                     [15, 10, 20, 10, 10]
+enemy_hp_rate =                     [5, 3, 8, 4, 4]
 enemy_intelligence_base =           [2, 3, 2, 10, 10]
+enemy_intelligence_rate =           [1, 2, 1, 3, 3]
 enemy_strength_base =               [3, 5, 2, 3, 3]
+enemy_strength_rate =               [2, 4, 1, 3, 3]
 enemy_defense_base =                [3, 2, 4, 1, 1]
+enemy_defense_rate =                [2, 1, 3, 1, 1]
 enemy_speed_base =                  [3, 1, 3, 5, 5]
-enemy_luck_base =                   [1, 1, 1, 1, 1]
-enemy_exp =                         [10, 10, 10, 10, 10]
+enemy_speed_rate =                  [1, 1, 1, 2, 2]
 enemy_critical_damage_percentage =  [1.2, 1.4, 1.0, 1.6, 1.6]
 enemy_attribute =                   [None, None, None, "light", "dark"]
 enemy_damage_type =                 ["physical", "physical", "physical", "magical", "magical"]
 
-#随机倍率
-def enemy_random_rate():
-    return random.randint(80, 120) / 100
+enemy = []
+
+#生成敌人
+def generate_enemy(i, lv):
+    enemy.append(Enemy(i, lv))
+
+#删除敌人
+def delete_enemy(i):
+    enemy.pop(i)
+
+
+
+
 
 
 
 class Enemy:
-    def __init__(self, name, level, damage_type, attribute=None):
-        self.name = name
-        self.level = level
-        self.damage_type = damage_type
-        self.hp = self.calculate_attribute(20, 5)
-        self.intelligence = self.calculate_attribute(10, 2)
-        self.strength = self.calculate_attribute(10, 2)
-        self.luck = self.calculate_attribute(10, 2)
-        self.speed = self.calculate_attribute(10, 2)
-        self.defense = self.calculate_attribute(10, 2)
-        self.exp = self.calculate_attribute(10, 3)  # Experience points given upon defeat
-        self.critical_damage_percentage = 1.2
-        self.attribute = attribute  # Can be set or determined later, if needed
+    def __init__(self, i, lv):
+        self.name = enemy_name[i]
+        self.level = lv
+        self.damage_type = enemy_damage_type[i]
+        self.hp =           self.calculate_attribute(enemy_hp_base[i], enemy_hp_rate[i])
+        self.temp_hp =      self.hp
+        self.intelligence = self.calculate_attribute(enemy_intelligence_base[i], enemy_intelligence_rate[i])
+        self.strength =     self.calculate_attribute(enemy_strength_base[i], enemy_strength_rate[i])
+        self.luck =         self.luck()
+        self.speed =        self.calculate_attribute(enemy_speed_base[i], enemy_speed_rate[i])
+        self.defense =      self.calculate_attribute(enemy_defense_base[i], enemy_defense_rate[i])
+        self.exp =          self.exp()
+        self.critical_damage_percentage = enemy_critical_damage_percentage[i]
+        self.attribute =    enemy_attribute[i]
 
-    def calculate_attribute(self, base, growth):
+    
+    def __str__(self) -> str:
+        pass
+
+    def calculate_attribute(self, base, rate):
         """
         Randomly generates an attribute based on the enemy's level.
         """
-        return base + growth * self.level + random.randint(-growth, growth)
+        return base + rate * self.level * (random.randint(80,120)/100)
+    
+    def luck(self):
+        if self.level > 20:
+            return 20
+        return self.level
+    
+    def exp(self):
+        return 5 * ((random.randint(100,120)/100) ** self.level)
+
 
     def base_damage(self):
         """
@@ -254,7 +304,53 @@ class Enemy:
         """
         Returns damage and attribute (if any) related to the attack.
         """
-        return [self.critical_damage(), self.attribute]
+        return self.critical_damage()
+    
+    # 死亡判断
+    def die_detect(self):
+        if self.temp_hp <= 0:
+            delete_enemy(0)
+            return True
+            # 死亡动画
+        else:
+            return False
+            # 受伤动画
+
+    #闪避判断
+    def miss_hit(self):
+        if random.randint(1, 100) <= self.speed:
+            return False
+        else:
+            return True
+        
+    #魔法伤害倍率计算
+    def magical_damage(self, attribute):
+        if attribute == "light":
+            if self.attribute == "light":
+                return 0.8
+            elif self.attribute == "dark":
+                return self.base_damage * 1.5
+            else:
+                return 1
+        else:
+            if self.attribute == "dark":
+                return 0.8
+            elif self.attribute == "light":
+                return self.base_damage * 1.5
+            else:
+                return 1
+            
+    #受伤函数
+    def get_hurt(self, damage, damage_type, attribute=None):
+        if self.miss_hit() == True:
+            if damage_type == "magical":
+                self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
+        else:
+            self.temp_hp -= (damage - self.defense)
+        self.die_detect()
+
+    
+
 
     def show(self):
         print(self.name)
@@ -267,10 +363,31 @@ class Enemy:
         print("Luck:", self.luck)
         print("\n")
 
+"""
+def who_first(player, opponent):
+    if player.speed > opponent.speed:
+        return player, opponent
+    else:
+        return opponent, player
+    
+
+def player_attack(player, opponent):
+    player_damage = player.damage()
+    opponent.get_hurt(player_damage, player.damage_type, player.weapon_attribute)
+    print(f"Player attacks {opponent.name} for {player_damage} damage. Remaining HP of {opponent.name}: {opponent.hp}")
+
+
+def opponent_attack(player, opponent):
+    enemy_damage = opponent.damage()
+    player.get_hurt(enemy_damage, opponent.damage_type, opponent.attribute)
+    print(f"{opponent.name} attacks Player for {enemy_damage} damage. Remaining HP of Player: {player.hp}")
+
+"""
+
 
 def battle_interaction(player, opponent):
     turn = 0
-    while player.hp > 0 and opponent.hp > 0:
+    while player.temp_hp > 0 and opponent.temp_hp > 0:
         turn += 1
         print(f"--- Turn {turn} ---")
 
