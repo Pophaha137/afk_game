@@ -194,6 +194,21 @@ class character:
         return self.luck
 
 
+enemy_name = ["Goblin",  "Skeleton", "Boar", "Light_Fairy", "Dark_Fairy"]
+enemy_hp_base =                     [10, 7, 15, 5, 5]
+enemy_intelligence_base =           [2, 3, 2, 10, 10]
+enemy_strength_base =               [3, 5, 2, 3, 3]
+enemy_defense_base =                [3, 2, 4, 1, 1]
+enemy_speed_base =                  [3, 1, 3, 5, 5]
+enemy_luck_base =                   [1, 1, 1, 1, 1]
+enemy_exp =                         [10, 10, 10, 10, 10]
+enemy_critical_damage_percentage =  [1.2, 1.4, 1.0, 1.6, 1.6]
+enemy_attribute =                   [None, None, None, "light", "dark"]
+enemy_damage_type =                 ["physical", "physical", "physical", "magical", "magical"]
+
+#随机倍率
+def enemy_random_rate():
+    return random.randint(80, 120) / 100
 
 
 

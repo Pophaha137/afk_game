@@ -10,7 +10,7 @@ sword_critical_damage_percentage = [1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3,
 weapons = []
 
 # 生成随机攻击数值
-def random_rate(i, luck):
+def weapon_random_rate(i, luck):
     base = sword_base_damage[i]
     rate = random.randint(luck, 100+luck)/100
     return base * rate 
@@ -21,11 +21,11 @@ def sort_weapon():
     # 将 weapons 列表保存到文件中
     with open(os.path.join('data', 'weapons.pkl'), 'wb') as f:
         pickle.dump(weapons, f)
-        
+
 # 生成武器
 def generate_weapon(i, luck):
     name = sword_name[i]
-    damage = random_rate(i, luck)
+    damage = weapon_random_rate(i, luck)
     attribute = sword_attribute[i]
     type = "sword"
     critical_damage_percentage = sword_critical_damage_percentage[i]
