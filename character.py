@@ -3,8 +3,7 @@ from jewelry import jewelry
 
 
 class character:
-    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, Weapon=None,
-                 Armor=None):
+    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, Weapon=None, Armor=None):
         self.lv = Lv
         self.exp = Exp
         self.exp_needed = 10 * 1.1 ** self.lv
@@ -17,12 +16,13 @@ class character:
         self.critical_damage_percentage = 1.2
         self.x = x
         self.y = y
-        self.jewelry = Jewelry
+        self.jewelry = None
         self.damage_type = None
         self.base_damage = None
         self.weapon_critical_damage_percentage = 0
-        self.temp_hp = self.hp
+        
 
+        #武器属性
         if Weapon != None:
             self.weapon_damage = Weapon.damage
             self.weapon_attribute = Weapon.attribute
@@ -34,6 +34,7 @@ class character:
             self.weapon_type = None
             self.weapon_critical_damage_percentage = 1.2
 
+        #防具属性
         if Armor != None:
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
@@ -41,31 +42,26 @@ class character:
             self.armor_defense = 0
             self.armor_attribute = None
 
-    # 养成类
-    # 经验条增加
-    def exp_add(self, exp):
-        self.exp += exp
-
-    # 升级函数
-    def level_update(self):
-        if self.exp >= self.exp_needed:
-            self.lv += 1
-            self.exp -= self.exp_needed
-            # 升级加点
-            self.lv_up_reward()
+        #珠宝属性
+        if Jewelry != None:
+            self.jewelry_hp = Jewelry.hp
+            self.jewelry_intelligence = Jewelry.intelligence
+            self.jewelry_strength = Jewelry.strength
+            self.jewelry_defense = Jewelry.defense
+            self.jewelry_speed = Jewelry.speed
+            self.jewelry_luck = Jewelry.luck
         else:
-            pass
+            self.jewelry_hp = 0
+            self.jewelry_intelligence = 0
+            self.jewelry_strength = 0
+            self.jewelry_defense = 0
+            self.jewelry_speed = 0
+            self.jewelry_luck = 0
+        
+        #战斗血量
+        self.temp_hp = self.hp + self.jewelry_hp
 
-    # 升级奖励函数
-    def lv_up_reward(self):
-        self.hp += 10
-        self.intelligence += 1
-        self.strength += 1
-        self.defense += 1
-        self.speed += 1
-        self.luck += 1
-        self.exp_needed = 10 ^ self.lv
-
+    # 养成类
     # 血量增加
     def hp_add(self):
         self.hp += 10
@@ -86,14 +82,31 @@ class character:
     def speed_add(self):
         self.speed += 1
 
-    # 珠宝增益???感觉不对
-    def jewelry(self, jewelry):
-        self.hp += jewelry.hp_rate
-        self.intelligence += jewelry.intelligence_rate
-        self.strength += jewelry.strength_rate
-        self.defense += jewelry.defense_rate
-        self.speed += jewelry.speed_rate
-        self.luck += jewelry.luck_rate
+    # 升级奖励函数
+    def lv_up_reward(self):
+        self.hp_add()
+        self.intelligence_add()
+        self.strength_add()
+        self.defense_add()
+        self.speed_add()
+        self.luck += 1
+        
+    # 升级函数
+    def level_update(self):
+        if self.exp >= self.exp_needed:
+            self.lv += 1
+            self.exp -= self.exp_needed
+            self.exp_needed = 10 ^ self.lv
+            # 升级加点
+            self.lv_up_reward()
+        else:
+            pass
+
+    # 经验条增加
+    def exp_add(self, exp):
+        self.exp += exp
+        self.level_update()
+
 
     # 战斗类
     # 伤害类型判断
@@ -117,7 +130,8 @@ class character:
 
     # 暴击伤害判断
     def critical_damage(self):
-        if random.randint(1, 100) >= self.luck:
+        if random.randint(1, 100) <= self.luck:  
+            # 发生暴击，返回暴击伤害
             if self.weapon_critical_damage_percentage == 0:
                 return self.base_damage * self.critical_damage_percentage
             else:
@@ -126,10 +140,9 @@ class character:
             # 未发生暴击，返回基础伤害
             return self.base_damage
         
-
     #伤害输出
     def damage(self):
-        return self.critical_damage(), self.damage_type, self.weapon_attribute
+        return self.critical_damage()
 
     # 死亡判断
     def die_detect(self):
@@ -143,34 +156,47 @@ class character:
     #闪避判断
     def miss_hit(self):
         if random.randint(1, 100) <= self.speed:
+            # 闪避成功
             return False
         else:
+            # 闪避失败
             return True
         
     #魔法伤害倍率计算
     def magical_damage(self, attribute):
+        # 光属性伤害
         if attribute == "light":
+            # 相同属性
             if self.armor_attribute == "light":
                 return 0.8
+            # 相克属性
             elif self.armor_attribute == "dark":
                 return self.base_damage * 1.5
+            # 无属性
             else:
                 return 1
+        # 暗属性伤害
         else:
+            # 相同属性
             if self.armor_attribute == "dark":
                 return 0.8
+            # 相克属性
             elif self.armor_attribute == "light":
                 return self.base_damage * 1.5
+            # 无属性
             else:
                 return 1
 
     #受伤函数
     def get_hurt(self, damage, damage_type, attribute=None):
+        # 闪避失败
         if self.miss_hit() == True:
+            # 魔法伤害计算
             if damage_type == "magical":
                 self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
-        else:
-            self.temp_hp -= (damage - self.defense)
+            # 物理伤害计算
+            else:
+                self.temp_hp -= (damage - self.defense)
         self.die_detect()
 
     # 武器类
@@ -216,7 +242,7 @@ class character:
     def show_luck(self):
         return self.luck
 
-
+# 怪物各项属性
 enemy_name = ["Goblin",  "Skeleton", "Boar", "Light_Fairy", "Dark_Fairy"]
 enemy_hp_base =                     [15, 10, 20, 10, 10]
 enemy_hp_rate =                     [5, 3, 8, 4, 4]
@@ -232,6 +258,7 @@ enemy_critical_damage_percentage =  [1.2, 1.4, 1.0, 1.6, 1.6]
 enemy_attribute =                   [None, None, None, "light", "dark"]
 enemy_damage_type =                 ["physical", "physical", "physical", "magical", "magical"]
 
+# 怪物队列
 enemy = []
 
 #生成敌人
@@ -241,11 +268,6 @@ def generate_enemy(i, lv):
 #删除敌人
 def delete_enemy(i):
     enemy.pop(i)
-
-
-
-
-
 
 
 class Enemy:
@@ -274,13 +296,15 @@ class Enemy:
         """
         return base + rate * self.level * (random.randint(80,120)/100)
     
+    # 幸运值计算
     def luck(self):
         if self.level > 20:
             return 20
         return self.level
     
+    # 经验值计算
     def exp(self):
-        return 5 * ((random.randint(100,120)/100) ** self.level)
+        return int (5 * ((random.randint(100,120)/100) ** self.level))
 
 
     def base_damage(self):
@@ -319,29 +343,40 @@ class Enemy:
     #闪避判断
     def miss_hit(self):
         if random.randint(1, 100) <= self.speed:
+            # 闪避成功
             return False
         else:
+            # 闪避失败
             return True
         
     #魔法伤害倍率计算
     def magical_damage(self, attribute):
+        # 光属性伤害
         if attribute == "light":
+            # 相同属性
             if self.attribute == "light":
                 return 0.8
+            # 相克属性
             elif self.attribute == "dark":
                 return self.base_damage * 1.5
+            # 无属性
             else:
                 return 1
+        # 暗属性伤害
         else:
+            # 相同属性
             if self.attribute == "dark":
                 return 0.8
+            # 相克属性
             elif self.attribute == "light":
                 return self.base_damage * 1.5
+            # 无属性
             else:
                 return 1
             
     #受伤函数
-    def get_hurt(self, damage, damage_type, attribute=None):
+    def get_hurt(self, damage, damage_type, attribute=None): 
+        # 闪避失败
         if self.miss_hit() == True:
             if damage_type == "magical":
                 self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
@@ -349,27 +384,20 @@ class Enemy:
             self.temp_hp -= (damage - self.defense)
         self.die_detect()
 
-    
-
-
     def show(self):
-        print(self.name)
-        print("lv:", self.level)
+        print("Name:", self.name)
+        print("Level:", self.level)
         print("HP:", self.hp)
         print("Intelligence:", self.intelligence)
         print("Strength:", self.strength)
         print("Defense:", self.defense)
         print("Speed:", self.speed)
         print("Luck:", self.luck)
+        print("Critical_damage_percentage:", self.critical_damage_percentage)
+        print("Attribute:", self.attribute)
         print("\n")
 
-"""
-def who_first(player, opponent):
-    if player.speed > opponent.speed:
-        return player, opponent
-    else:
-        return opponent, player
-    
+""" 
 
 def player_attack(player, opponent):
     player_damage = player.damage()
@@ -381,6 +409,37 @@ def opponent_attack(player, opponent):
     enemy_damage = opponent.damage()
     player.get_hurt(enemy_damage, opponent.damage_type, opponent.attribute)
     print(f"{opponent.name} attacks Player for {enemy_damage} damage. Remaining HP of Player: {player.hp}")
+
+def fight(player, opponent):
+    turn = 0
+    while player.temp_hp > 0 and opponent.temp_hp > 0:
+    if player.speed >= opponent.speed:
+        turn += 1
+        print(f"--- Turn {turn} ---")
+        player_attack(player, opponent)
+        if opponent.temp_hp <= 0:
+            print(f"{opponent.name} defeated!")
+            player.exp_add(opponent.exp)
+            print(f"Player gained {opponent.exp} experience.")
+            player.level_update()
+            break
+        opponent_attack(player, opponent)
+        if player.temp_hp <= 0:
+            print("Player defeated! Game Over.")
+    else:
+        turn += 1
+        print(f"--- Turn {turn} ---")
+        opponent_attack(player, opponent)
+        if player.temp_hp <= 0:
+            print("Player defeated! Game Over.")
+            break
+        player_attack(player, opponent)
+        if opponent.temp_hp <= 0:
+            print(f"{opponent.name} defeated!")
+            player.exp_add(opponent.exp)
+            print(f"Player gained {opponent.exp} experience.")
+            player.level_update()
+            break
 
 """
 
