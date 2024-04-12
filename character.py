@@ -452,7 +452,15 @@ class Enemy:
         print("Attribute:", self.attribute)
         print("\n")
 
+generate_enemy(0, 1)
+enemy[0].show()
+generate_enemy(3, 1)
+enemy[1].show()
+
+
 """ 
+
+
 
 def player_attack(player, opponent):
     player_damage = player.damage()
@@ -495,6 +503,7 @@ def fight(player, opponent):
             print(f"Player gained {opponent.exp} experience.")
             player.level_update()
             break
+            
 
 """
 
