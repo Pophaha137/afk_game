@@ -15,6 +15,13 @@ def random_rate(i, luck):
     rate = random.randint(luck, 100+luck)/100
     return base * rate 
 
+#武器排序以及保存
+def sort_weapon():
+    weapons.sort(key=lambda x: x.damage, reverse=True)
+    # 将 weapons 列表保存到文件中
+    with open(os.path.join('data', 'weapons.pkl'), 'wb') as f:
+        pickle.dump(weapons, f)
+        
 # 生成武器
 def generate_weapon(i, luck):
     name = sword_name[i]
@@ -25,15 +32,16 @@ def generate_weapon(i, luck):
     weapon = Weapon(name, damage, attribute, type, critical_damage_percentage)
     weapons.append(weapon)
     # 将 weapons 列表保存到文件中
-    with open(os.path.join('data', 'weapons.pkl'), 'wb') as f:
-        pickle.dump(weapons, f)
+    sort_weapon()
 
 #删除武器
 def delete_weapon(i):
     weapons.pop(i)
     # 将 weapons 列表保存到文件中
-    with open(os.path.join('data', 'weapons.pkl'), 'wb') as f:
-        pickle.dump(weapons, f)
+    sort_weapon()
+
+
+
 
 class Weapon:
     def __init__(self, name, damage, attribute, type, critical_damage_percentage):

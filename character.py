@@ -194,8 +194,11 @@ class character:
         return self.luck
 
 
+
+
+
 class Enemy:
-    def __init__(self, name, level, damage_type):
+    def __init__(self, name, level, damage_type, attribute=None):
         self.name = name
         self.level = level
         self.damage_type = damage_type
@@ -207,7 +210,7 @@ class Enemy:
         self.defense = self.calculate_attribute(10, 2)
         self.exp = self.calculate_attribute(10, 3)  # Experience points given upon defeat
         self.critical_damage_percentage = 1.2
-        self.attribute = None  # Can be set or determined later, if needed
+        self.attribute = attribute  # Can be set or determined later, if needed
 
     def calculate_attribute(self, base, growth):
         """
