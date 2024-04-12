@@ -58,29 +58,49 @@ class character:
             self.jewelry_speed = 0
             self.jewelry_luck = 0
         
-        #战斗血量
+        #战斗属性
         self.temp_hp = self.hp + self.jewelry_hp
+        self.temp_strength = self.strength + self.jewelry_strength
+        self.temp_intelligence = self.intelligence + self.jewelry_intelligence
+        self.temp_defense = self.defense + self.armor_defense + self.jewelry_defense
+        self.temp_speed = self.speed + self.jewelry_speed
+        self.temp_luck = self.luck + self.jewelry_luck
+
+    # 战斗属性更新
+    def temp_refresh(self):
+        self.temp_hp = self.hp + self.jewelry_hp
+        self.temp_strength = self.strength + self.jewelry_strength
+        self.temp_intelligence = self.intelligence + self.jewelry_intelligence
+        self.temp_defense = self.defense + self.armor_defense + self.jewelry_defense
+        self.temp_speed = self.speed + self.jewelry_speed
+        self.temp_luck = self.luck + self.jewelry_luck
+
 
     # 养成类
     # 血量增加
     def hp_add(self):
         self.hp += 10
+        self.temp_refresh()
 
     # 力量增加
     def strength_add(self):
         self.strength += 1
+        self.temp_refresh()
 
     # 智力增加
     def intelligence_add(self):
         self.intelligence += 1
+        self.temp_refresh()
 
     # 防御增加
     def defense_add(self):
         self.defense += 1
+        self.temp_refresh()
 
     # 速度增加
     def speed_add(self):
         self.speed += 1
+        self.temp_refresh()
 
     # 升级奖励函数
     def lv_up_reward(self):
@@ -90,6 +110,7 @@ class character:
         self.defense_add()
         self.speed_add()
         self.luck += 1
+        self.temp_refresh()
         
     # 升级函数
     def level_update(self):
@@ -124,13 +145,13 @@ class character:
     @property
     def base_damage_func(self):
         if self.damage_type == "magical":
-            return self.intelligence + self.weapon_damage
+            return self.temp_intelligence + self.weapon_damage
         else:
-            return self.strength + self.weapon_damage
+            return self.temp_strength + self.weapon_damage
 
     # 暴击伤害判断
     def critical_damage(self):
-        if random.randint(1, 100) <= self.luck:  
+        if random.randint(1, 100) <= self.temp_luck:  
             # 发生暴击，返回暴击伤害
             if self.weapon_critical_damage_percentage == 0:
                 return self.base_damage * self.critical_damage_percentage
@@ -155,7 +176,7 @@ class character:
 
     #闪避判断
     def miss_hit(self):
-        if random.randint(1, 100) <= self.speed:
+        if random.randint(1, 100) <= self.temp_speed:
             # 闪避成功
             return False
         else:
@@ -171,7 +192,7 @@ class character:
                 return 0.8
             # 相克属性
             elif self.armor_attribute == "dark":
-                return self.base_damage * 1.5
+                return  1.5
             # 无属性
             else:
                 return 1
@@ -182,7 +203,7 @@ class character:
                 return 0.8
             # 相克属性
             elif self.armor_attribute == "light":
-                return self.base_damage * 1.5
+                return  1.5
             # 无属性
             else:
                 return 1
@@ -193,10 +214,10 @@ class character:
         if self.miss_hit() == True:
             # 魔法伤害计算
             if damage_type == "magical":
-                self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
+                self.temp_hp -= (damage * self.magical_damage(attribute) - self.temp_intelligence)
             # 物理伤害计算
             else:
-                self.temp_hp -= (damage - self.defense)
+                self.temp_hp -= (damage - self.temp_defense)
         self.die_detect()
 
     # 武器类
@@ -213,6 +234,39 @@ class character:
         self.weapon_type = None
         self.critical_damage_percentage = 1.2
         self.base_damage = self.base_damage_func()
+
+
+    # 防具类
+    def armor_on(self, armor):
+        self.armor_defense = armor.defense
+        self.armor_attribute = armor.attribute
+        self.base_damage = self.base_damage_func()
+        self.temp_refresh()
+
+    def armor_off(self):
+        self.armor_defense = 0
+        self.armor_attribute = None
+        self.base_damage = self.base_damage_func()
+        self.temp_refresh()
+
+    # 珠宝类
+    def jewelry_on(self, jewelry):
+        self.jewelry_hp = jewelry.hp
+        self.jewelry_intelligence = jewelry.intelligence
+        self.jewelry_strength = jewelry.strength
+        self.jewelry_defense = jewelry.defense
+        self.jewelry_speed = jewelry.speed
+        self.jewelry_luck = jewelry.luck
+        self.temp_refresh()
+
+    def jewelry_off(self):
+        self.jewelry_hp = 0
+        self.jewelry_intelligence = 0
+        self.jewelry_strength = 0
+        self.jewelry_defense = 0
+        self.jewelry_speed = 0
+        self.jewelry_luck = 0
+        self.temp_refresh()
 
     # 状态类
     # 状态刷新
@@ -298,9 +352,10 @@ class Enemy:
     
     # 幸运值计算
     def luck(self):
-        if self.level > 20:
+        lv = self.level
+        if lv >= 20:
             return 20
-        return self.level
+        return lv
     
     # 经验值计算
     def exp(self):
@@ -358,7 +413,7 @@ class Enemy:
                 return 0.8
             # 相克属性
             elif self.attribute == "dark":
-                return self.base_damage * 1.5
+                return  1.5
             # 无属性
             else:
                 return 1
@@ -369,7 +424,7 @@ class Enemy:
                 return 0.8
             # 相克属性
             elif self.attribute == "light":
-                return self.base_damage * 1.5
+                return  1.5
             # 无属性
             else:
                 return 1
