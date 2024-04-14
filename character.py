@@ -119,6 +119,7 @@ class character:
     def level_update(self):
         if self.exp >= self.exp_needed:
             self.lv += 1
+            print(f"Player has leveled up to {self.lv}")
             self.exp -= self.exp_needed
             self.exp_needed = 10 ^ self.lv
             # 升级加点
@@ -447,6 +448,7 @@ class Enemy:
             print("Miss Hit!")
 
     def show(self):
+        print("\n--- Status ---")
         print("Name:", self.name)
         print("Level:", self.level)
         print("HP:", self.hp)
@@ -474,6 +476,9 @@ def opponent_attack(player, opponent):
 
 
 def fight(player, opponent):
+    print(f"\n\nPlayer has encountered a {opponent.name}!")
+    opponent.show()
+    print("--- Battle Starts! ---\n")
     turn = 0
     while player.temp_hp > 0 and opponent.temp_hp > 0:
         if player.speed >= opponent.speed:
@@ -482,8 +487,8 @@ def fight(player, opponent):
             player_attack(player, opponent)
             if opponent.temp_hp <= 0:
                 print(f"{opponent.name} defeated!")
-                player.exp_add(opponent.exp)
                 print(f"Player gained {opponent.exp} experience.")
+                player.exp_add(opponent.exp)
                 player.level_update()
                 break
             opponent_attack(player, opponent)
@@ -499,8 +504,8 @@ def fight(player, opponent):
             player_attack(player, opponent)
             if opponent.temp_hp <= 0:
                 print(f"{opponent.name} defeated!")
-                player.exp_add(opponent.exp)
                 print(f"Player gained {opponent.exp} experience.")
+                player.exp_add(opponent.exp)
                 player.level_update()
                 break
 
@@ -513,9 +518,14 @@ player.weapon_on(weapons[0])
 player.show()
 
 generate_enemy(0, 1)
-enemy[0].show()
-generate_enemy(3, 1)
-enemy[1].show()
+generate_enemy(1, 2)
+generate_enemy(2, 3)
+generate_enemy(3, 3)
+generate_enemy(4, 3)
 
+
+fight(player, enemy[0])
+fight(player, enemy[0])
+fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
