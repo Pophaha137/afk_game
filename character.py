@@ -1,5 +1,8 @@
 import random
 from jewelry import jewelry
+from Weapon import *
+
+weapons = []
 
 
 class character:
@@ -295,6 +298,26 @@ class character:
 
     def show_luck(self):
         return self.luck
+    
+
+player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
+generate_weapon(1, player.show_luck())
+player.show()
+
+player.weapon_on(weapons[0])
+player.show()
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 怪物各项属性
 enemy_name = ["Goblin",  "Skeleton", "Boar", "Light_Fairy", "Dark_Fairy"]

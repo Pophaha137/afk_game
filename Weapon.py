@@ -66,5 +66,6 @@ generate_weapon(1,10)
 generate_weapon(2,10)
 
 # 打印 weapons 列表中的所有武器
-for i in weapons:
-    print(i)
+def show_weapon():
+    for i in weapons:
+        print(i)
