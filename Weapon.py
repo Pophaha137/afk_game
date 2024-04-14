@@ -55,12 +55,26 @@ class Weapon:
     def __str__(self):
         return f"{self.name} ({self.type}) - {self.damage:.2f} {self.attribute} damage, {self.critical_damage_percentage:.1f}% critical damage"
     
+    def weapon_damage(self):
+        return self.damage
+    
+    def weapon_attribute(self):
+        return self.attribute
+    
+    def weapon_type(self):
+        return self.type
 
-# 检查文件是否存在，如果存在则加载，否则生成新的武器
-if os.path.exists(os.path.join('data', 'weapons.pkl')):
-    # 从文件中加载 weapons 列表
-    with open(os.path.join('data', 'weapons.pkl'), 'rb') as f:
-        weapons = pickle.load(f)
+    def weapon_critical_damage_percentage(self):
+        return self.critical_damage_percentage
+
+    
+    
+def load_weapons():
+    # 检查文件是否存在，如果存在则加载，否则生成新的武器
+    if os.path.exists(os.path.join('data', 'weapons.pkl')):
+        # 从文件中加载 weapons 列表
+        with open(os.path.join('data', 'weapons.pkl'), 'rb') as f:
+            weapons = pickle.load(f)
 
 generate_weapon(1,10)
 generate_weapon(2,10)

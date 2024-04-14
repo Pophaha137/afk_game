@@ -2,7 +2,7 @@ import random
 from jewelry import jewelry
 from Weapon import *
 
-weapons = []
+
 
 
 class character:
@@ -20,17 +20,17 @@ class character:
         self.x = x
         self.y = y
         self.jewelry = None
-        self.damage_type = None
-        self.base_damage = None
+        
         self.weapon_critical_damage_percentage = 0
         
 
         #武器属性
         if Weapon != None:
-            self.weapon_damage = Weapon.damage
-            self.weapon_attribute = Weapon.attribute
-            self.weapon_type = Weapon.type
-            self.weapon_critical_damage_percentage = Weapon.critical_damage_percentage
+            self.weapon = Weapon
+            self.weapon_damage = self.weapon.damage
+            self.weapon_attribute = self.weapon.attribute
+            self.weapon_type = self.weapon.type
+            self.weapon_critical_damage_percentage = self.weapon.critical_damage_percentage
         else:
             self.weapon_damage = 0
             self.weapon_attribute = None
@@ -60,7 +60,7 @@ class character:
             self.jewelry_defense = 0
             self.jewelry_speed = 0
             self.jewelry_luck = 0
-        
+
         #战斗属性
         self.temp_hp = self.hp + self.jewelry_hp
         self.temp_strength = self.strength + self.jewelry_strength
@@ -68,6 +68,11 @@ class character:
         self.temp_defense = self.defense + self.armor_defense + self.jewelry_defense
         self.temp_speed = self.speed + self.jewelry_speed
         self.temp_luck = self.luck + self.jewelry_luck
+
+        self.damage_type = self.damage_type_func()
+        self.base_damage = self.base_damage_func()
+        
+        
 
     # 战斗属性更新
     def temp_refresh(self):
@@ -145,8 +150,8 @@ class character:
             return "physical"
 
     # 基础伤害值
-    @property
     def base_damage_func(self):
+        
         if self.damage_type == "magical":
             return self.temp_intelligence + self.weapon_damage
         else:
@@ -224,11 +229,12 @@ class character:
         self.die_detect()
 
     # 武器类
-    def weapon_on(self, weapon):
-        self.weapon_damage = weapon.damage
-        self.weapon_attribute = weapon.attribute
-        self.weapon_type = weapon.type
-        self.critical_damage_percentage = weapon.critical_damage_percentage
+    def weapon_on(self, Weapon):
+        self.weapon = Weapon
+        self.weapon_damage = self.weapon.damage
+        self.weapon_attribute = self.weapon.attribute
+        self.weapon_type = self.weapon.type
+        self.critical_damage_percentage = self.weapon.critical_damage_percentage
         self.base_damage = self.base_damage_func()
 
     def weapon_off(self):
@@ -303,7 +309,7 @@ class character:
 player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
 generate_weapon(1, player.show_luck())
 player.show()
-
+show_weapon()
 player.weapon_on(weapons[0])
 player.show()
 
@@ -558,5 +564,3 @@ def battle_interaction(player, opponent):
             print("Player defeated! Game Over.")
 
 
-enemy = Enemy("Goblin", 1, "magical")
-print(enemy.show())
