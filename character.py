@@ -217,16 +217,18 @@ class character:
                 return 1
 
     #受伤函数
-    def get_hurt(self, damage, damage_type, attribute=None):
+    def get_hurt(self, enemy_damage, damage_type, attribute=None):
         # 闪避失败
         if self.miss_hit() == True:
             # 魔法伤害计算
             if damage_type == "magical":
-                self.temp_hp -= (damage * self.magical_damage(attribute) - self.temp_intelligence)
+                self.temp_hp -= (enemy_damage * self.magical_damage(attribute) - self.temp_intelligence)
             # 物理伤害计算
             else:
-                self.temp_hp -= (damage - self.temp_defense)
-        self.die_detect()
+                self.temp_hp -= (enemy_damage - self.temp_defense)
+            self.die_detect()
+        else:
+            print("Miss Hit!")
 
     # 武器类
     def weapon_on(self, Weapon):
@@ -362,10 +364,10 @@ class Enemy:
         self.temp_hp =      self.hp
         self.intelligence = self.calculate_attribute(enemy_intelligence_base[i], enemy_intelligence_rate[i])
         self.strength =     self.calculate_attribute(enemy_strength_base[i], enemy_strength_rate[i])
-        self.luck =         self.luck()
+        self.luck =         self.lucky()
         self.speed =        self.calculate_attribute(enemy_speed_base[i], enemy_speed_rate[i])
         self.defense =      self.calculate_attribute(enemy_defense_base[i], enemy_defense_rate[i])
-        self.exp =          self.exp()
+        self.exp =          self.exp_cal()
         self.critical_damage_percentage = enemy_critical_damage_percentage[i]
         self.attribute =    enemy_attribute[i]
 
@@ -380,14 +382,14 @@ class Enemy:
         return base + rate * self.level * (random.randint(80,120)/100)
     
     # 幸运值计算
-    def luck(self):
+    def lucky(self):
         lv = self.level
         if lv >= 20:
             return 20
         return lv
     
     # 经验值计算
-    def exp(self):
+    def exp_cal(self):
         return int (5 * ((random.randint(100,120)/100) ** self.level))
 
 
@@ -405,10 +407,10 @@ class Enemy:
         Determines if a critical hit occurs and calculates damage accordingly.
         """
         if random.randint(1, 100) <= self.luck:  # Assuming higher luck means higher chance of crit
-            return self.base_damage * self.critical_damage_percentage
-        return self.base_damage
+            return float(self.base_damage() * self.critical_damage_percentage)
+        return float(self.base_damage())
 
-    def damage(self):
+    def damage_cal(self):
         """
         Returns damage and attribute (if any) related to the attack.
         """
@@ -464,9 +466,11 @@ class Enemy:
         if self.miss_hit() == True:
             if damage_type == "magical":
                 self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
+            else:
+                self.temp_hp -= (damage - self.defense)
+            self.die_detect()
         else:
-            self.temp_hp -= (damage - self.defense)
-        self.die_detect()
+            print("Miss Hit!")
 
     def show(self):
         print("Name:", self.name)
@@ -487,7 +491,7 @@ generate_enemy(3, 1)
 enemy[1].show()
 
 
-""" 
+
 
 
 
@@ -498,40 +502,40 @@ def player_attack(player, opponent):
 
 
 def opponent_attack(player, opponent):
-    enemy_damage = opponent.damage()
+    enemy_damage = opponent.damage_cal()
     player.get_hurt(enemy_damage, opponent.damage_type, opponent.attribute)
     print(f"{opponent.name} attacks Player for {enemy_damage} damage. Remaining HP of Player: {player.hp}")
 
 def fight(player, opponent):
     turn = 0
     while player.temp_hp > 0 and opponent.temp_hp > 0:
-    if player.speed >= opponent.speed:
-        turn += 1
-        print(f"--- Turn {turn} ---")
-        player_attack(player, opponent)
-        if opponent.temp_hp <= 0:
-            print(f"{opponent.name} defeated!")
-            player.exp_add(opponent.exp)
-            print(f"Player gained {opponent.exp} experience.")
-            player.level_update()
-            break
-        opponent_attack(player, opponent)
-        if player.temp_hp <= 0:
-            print("Player defeated! Game Over.")
-    else:
-        turn += 1
-        print(f"--- Turn {turn} ---")
-        opponent_attack(player, opponent)
-        if player.temp_hp <= 0:
-            print("Player defeated! Game Over.")
-            break
-        player_attack(player, opponent)
-        if opponent.temp_hp <= 0:
-            print(f"{opponent.name} defeated!")
-            player.exp_add(opponent.exp)
-            print(f"Player gained {opponent.exp} experience.")
-            player.level_update()
-            break
+        if player.speed >= opponent.speed:
+            turn += 1
+            print(f"--- Turn {turn} ---")
+            player_attack(player, opponent)
+            if opponent.temp_hp <= 0:
+                print(f"{opponent.name} defeated!")
+                player.exp_add(opponent.exp)
+                print(f"Player gained {opponent.exp} experience.")
+                player.level_update()
+                break
+            opponent_attack(player, opponent)
+            if player.temp_hp <= 0:
+                print("Player defeated! Game Over.")
+        else:
+            turn += 1
+            print(f"--- Turn {turn} ---")
+            opponent_attack(player, opponent)
+            if player.temp_hp <= 0:
+                print("Player defeated! Game Over.")
+                break
+            player_attack(player, opponent)
+            if opponent.temp_hp <= 0:
+                print(f"{opponent.name} defeated!")
+                player.exp_add(opponent.exp)
+                print(f"Player gained {opponent.exp} experience.")
+                player.level_update()
+                break
             
 
 """
@@ -563,4 +567,6 @@ def battle_interaction(player, opponent):
         if player.hp <= 0:
             print("Player defeated! Game Over.")
 
-
+"""
+fight(player, enemy[0])
+fight(player, enemy[0])
