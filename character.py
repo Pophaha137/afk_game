@@ -217,10 +217,16 @@ class character:
         if self.miss_hit() == True:
             # 魔法伤害计算
             if damage_type == "magical":
-                self.temp_hp -= (enemy_damage * self.magical_damage(attribute) - self.temp_intelligence)
+                if (enemy_damage * self.magical_damage(attribute)) <= self.temp_intelligence:
+                    print("TOO WEAK!")
+                else:
+                    self.temp_hp -= (enemy_damage * self.magical_damage(attribute) - self.temp_intelligence)
             # 物理伤害计算
             else:
-                self.temp_hp -= (enemy_damage - self.temp_defense)
+                if enemy_damage <= self.temp_defense:
+                    print("TOO WEAK!")
+                else:
+                    self.temp_hp -= (enemy_damage - self.temp_defense)
             self.die_detect()
         else:
             print("Miss Hit!")
@@ -440,9 +446,15 @@ class Enemy:
         # 闪避失败
         if self.miss_hit() == True:
             if damage_type == "magical":
-                self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
+                if self.magical_damage(attribute) * damage <= self.intelligence:
+                    print("TOO WEAK!")
+                else:
+                    self.temp_hp -= (self.magical_damage(attribute) * damage - self.intelligence)
             else:
-                self.temp_hp -= (damage - self.defense)
+                if damage <= self.defense:
+                    print("TOO WEAK!")
+                else:
+                    self.temp_hp -= (damage - self.defense)
             self.die_detect()
         else:
             print("Miss Hit!")
