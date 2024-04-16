@@ -3,9 +3,11 @@ import sys
 from Textbutton import TButton
 from function import *
 def SecondFloor(surface):
+    global state
     from backpack import backpack
     #from itembox import itembox
-    from Ffloor import FirstfFloor
+    from Ffloor import FirstFloor
+    state = "Sfloor"
     #screen size
     w=1280
     h=800

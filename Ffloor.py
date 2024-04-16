@@ -2,11 +2,13 @@ import pygame
 import sys
 from Textbutton import TButton
 from function import *
-def FirstfFloor(surface):
+def FirstFloor(surface):
+    global state
     from backpack import backpack
     from smithy import smithy
     from Sfloor import SecondFloor
     from synthesis import synthesis
+    state = "Floor"
     #screen size
     w=1280
     h=800
@@ -62,4 +64,5 @@ def FirstfFloor(surface):
 
 screen = pygame.display.set_mode((1280, 800))
 if __name__ == '__main__':
+
     FirstfFloor(screen)

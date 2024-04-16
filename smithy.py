@@ -3,14 +3,14 @@ from Textbutton import TButton
 from function import *
 
 def smithy(surface):
-    from Ffloor import FirstfFloor
+    from Ffloor import FirstFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"),(50,50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"),(50,50))
     smithy = pygame.transform.scale(pygame.image.load("./resource/character/TUI.png"),(1280,800))
     #button
-    esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstfFloor, font,(0,0,0))
+    esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstFloor, font,(0,0,0))
     running = True
     while running:
         for event in pygame.event.get():
