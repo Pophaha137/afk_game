@@ -16,59 +16,6 @@ def weapon_random_rate(i, luck):
     rate = random.randint(luck, 100+luck)/100
     return base * rate 
 
-# 将数据保存到文件中
-def save_items_to_file(filename, items):
-    directory = 'data'
-    filename = os.path.join(directory, filename)
-    # 如果文件夹不存在则创建文件夹
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    # 将数据保存到文件中
-    with open(filename, 'wb') as f:
-        pickle.dump(items, f)
-    print(f"Items saved to {filename}.")
-
-# 从文件中加载数据
-def load_items_from_file(filename):
-    directory = 'data'
-    filename = os.path.join(directory, filename)
-    # 如果文件夹不存在则创建文件夹
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    # 如果文件存在则加载数据
-    if os.path.exists(filename):
-        with open(filename, 'rb') as f:
-            items = pickle.load(f)
-        print(f"Items loaded from {filename}.")
-        return items
-    # 如果文件不存在则创建一个新文件
-    else:
-        print(f"File {filename} does not exist. Creating a new file.")
-        items = []
-        with open(filename, 'wb') as f:
-            pickle.dump(items, f)
-        print(f"New file {filename} created.")
-        return items
-
-# 遍历inventory的items字典，打印每个物品的信息
-def print_weapons_hash():
-    for id in weapon_hash.items:
-        print(weapon_hash.get_item(id))
-    print("\n")
-
-# 遍历weapons列表，打印每个物品的信息
-def print_weapons():
-    for i in weapons:
-        print(i)
-    print("\n")
-
-def get_weapon_id(position_id):
-    if len(weapons) > position_id:
-        return weapons[position_id].id
-    else:
-        print("Error: The position_id is out of range.")
-        return None
-
 # 定义武器类
 class Weapon:
     def __init__(self, id, name, damage, attribute, type, critical_damage_percentage):
@@ -96,7 +43,7 @@ class Weapon:
         return self.critical_damage_percentage
 
 # 定义库存类，用于管理物品
-class Inventory:
+class w_hash:
     def __init__(self):
         self.items = {}  # 用字典作为哈希表存储物品
 
@@ -150,8 +97,75 @@ class Inventory:
         else:
             print(f"Item ID {id} not found.")
 
-    
+# 将数据保存到文件中
+def save_items_to_file(filename, items):
+    directory = 'data'
+    file = os.path.join(directory, filename)
+    # 如果文件夹不存在则创建文件夹
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    # 将数据保存到文件中
+    with open(file, 'wb') as f:
+        pickle.dump(items, f)
+    print(f"Items saved to {file}.")
+    items = load_items_from_file(filename)
+    if items == weapon_hash:
+        weapon_hash_check()
 
+
+# 从文件中加载数据
+def load_items_from_file(filename):
+    directory = 'data'
+    filename = os.path.join(directory, filename)
+    # 如果文件夹不存在则创建文件夹
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    # 如果文件存在则加载数据
+    if os.path.exists(filename):
+        with open(filename, 'rb') as f:
+            items = pickle.load(f)
+        print(f"Items loaded from {filename}.")
+        return items
+    # 如果文件不存在则创建一个新文件
+    else:
+        print(f"File {filename} does not exist. Creating a new file.")
+        items = []
+        with open(filename, 'wb') as f:
+            pickle.dump(items, f)
+        print(f"New file {filename} created.")
+        return items
+
+# 遍历w_hash的items字典，打印每个物品的信息
+def print_weapons_hash():
+    for id in weapon_hash.items:
+        print(weapon_hash.get_item(id))
+    print("\n")
+
+# 遍历weapons列表，打印每个物品的信息
+def print_weapons():
+    for i in weapons:
+        print(i)
+    print("\n")
+
+# 根据位置获取武器的ID
+def get_weapon_id(position_id):
+    if len(weapons) > position_id:
+        return weapons[position_id].id
+    else:
+        print("Error: The position_id is out of range.")
+        return None
+
+
+
+# weapon_hash的检测
+def weapon_hash_check():
+    global weapon_hash
+    weapon_hash = load_items_from_file("weapon_hash.pkl")
+    # 如果 weapon_hash 不是 w_hash 对象，则创建一个新的 w_hash 对象
+    if not isinstance(weapon_hash, w_hash):
+        weapon_hash = w_hash()  
+        save_items_to_file("weapon_hash.pkl", weapon_hash)
+        weapon_hash = load_items_from_file("weapon_hash.pkl")
 
 #武器排序以及保存
 def sort_weapon():
@@ -162,9 +176,14 @@ def sort_weapon():
 
 # 生成武器
 def generate_weapon(i, luck):
-    weapon_hash = load_items_from_file("weapon_hash.pkl")
+    weapon_hash = w_hash()
+    loaded_items = load_items_from_file("weapon_hash.pkl")
+    if isinstance(loaded_items, w_hash):
+        weapon_hash = loaded_items
+    else:
+        print("Loaded items are not an w_hash object. They are: ", type(loaded_items))
     weapon_hash.add_item(i, luck)
-    save_items_to_file("weapon_hash.pkl", weapon_hash)
+    save_items_to_file("weapons.pkl", weapons)
     sort_weapon()
 
 #删除武器
@@ -180,13 +199,15 @@ def delete_weapon(id_to_remove):
     
 # 测试    
 weapons = load_items_from_file("weapons.pkl")
-print_weapons()
-weapon_hash = Inventory()
-weappon_hash = load_items_from_file("weapon_hash.pkl")
+#weapon_hash = w_hash()
+weapon_hash = load_items_from_file("weapon_hash.pkl")
+weapon_hash_check()
+print_weapons_hash()
 
 generate_weapon(0, 10)
 print_weapons()
 #delete_weapon(get_weapon_id(0))
+print_weapons_hash()
 
 save_items_to_file("weapons.pkl", weapons)
 save_items_to_file("weapon_hash.pkl", weapon_hash)
