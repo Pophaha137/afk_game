@@ -2,10 +2,13 @@ import pygame
 import sys
 from Textbutton import TButton
 from function import *
-def FirstfFloor(surface):
+def FirstFloor(surface):
+    global state
     from backpack import backpack
     from smithy import smithy
     from Sfloor import SecondFloor
+    from synthesis import synthesis
+    state = "Floor"
     #screen size
     w=1280
     h=800
@@ -19,7 +22,7 @@ def FirstfFloor(surface):
     stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stairs.png").convert_alpha(),(150,200))
 
     #button
-    crucible = TButton(0, 100," ", cruciblei, cruciblei, None,None, font,(0,0,0))
+    crucible = TButton(0, 100," ", cruciblei, cruciblei, None,synthesis, font,(0,0,0))
     forge = TButton(w/3*2, 0," ", forgei, forgei, None, smithy, font, (0,0,0))
     head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
     door = TButton(500, h-200, " ", doori, doori, None, None,font, (0,0,0))
@@ -61,4 +64,5 @@ def FirstfFloor(surface):
 
 screen = pygame.display.set_mode((1280, 800))
 if __name__ == '__main__':
+
     FirstfFloor(screen)
