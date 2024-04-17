@@ -5,10 +5,21 @@ import random
 import pickle
 import os
 
+#武器数据
 sword_name = ["God_bless","God_curse","God_sword","God_axe","God_bow","God_staff","God_wand","God_knife","God_spear","God_shield"]
 sword_base_damage = [10,10,10,10,10,10,10,10,10,10]
 sword_attribute = ["light","dark","light","dark","light","dark","light","dark","light","dark"]
 sword_critical_damage_percentage = [1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4]
+
+def generate_unique_id(name):
+        """
+        生成一个基于当前时间、物品名称和随机数的独一无二的ID。
+        使用SHA1哈希算法来确保ID的唯一性。
+        """
+        unique_string = f"{name}_{time.time()}_{random.randint(1, 10000)}"
+        unique_id = hashlib.sha1(unique_string.encode()).hexdigest()
+        return unique_id
+
 
 # 生成随机攻击数值
 def weapon_random_rate(i, luck):
@@ -42,60 +53,7 @@ class Weapon:
     def weapon_critical_damage_percentage(self):
         return self.critical_damage_percentage
 
-# 定义库存类，用于管理物品
-class w_hash:
-    def __init__(self):
-        self.items = {}  # 用字典作为哈希表存储物品
 
-    def generate_unique_id(self, name):
-        """
-        生成一个基于当前时间、物品名称和随机数的独一无二的ID。
-        使用SHA1哈希算法来确保ID的唯一性。
-        """
-        unique_string = f"{name}_{time.time()}_{random.randint(1, 10000)}"
-        unique_id = hashlib.sha1(unique_string.encode()).hexdigest()
-        return unique_id
-
-    def add_item(self, weapon_type_id, luck):
-        # 生成物品的ID并添加到库存
-        id = self.generate_unique_id(sword_name[weapon_type_id])
-        if id not in self.items:
-            damage = weapon_random_rate(weapon_type_id, luck)
-            self.items[id] = Weapon(id, sword_name[weapon_type_id], damage, sword_attribute[weapon_type_id], "sword", sword_critical_damage_percentage[weapon_type_id])
-            weapons.append(self.items[id])
-            print(f"Item {sword_name[weapon_type_id]} with ID {id} added.")
-        else:
-            print(f"Item ID {id} already exists.")
-        save_items_to_file("weapon_hash.pkl", weapon_hash)
-
-    def remove_item(self, id):
-        # 根据ID移除物品
-        if id in self.items:
-            del self.items[id]
-            print(f"Item ID {id} removed.")
-        else:
-            print(f"Item ID {id} not found.")
-        save_items_to_file("weapon_hash.pkl", weapon_hash)
-
-    def get_item(self, id):
-        # 根据ID获取物品
-        return self.items.get(id, None)
-
-    def update_item(self, id, **kwargs):
-        """
-        根据ID更新物品的信息。
-        kwargs 可用于传递希望更新的属性值，如名称或描述。
-        """
-        weapon = self.get_item(id)
-        if weapon:
-            weapon.name = kwargs.get('name', weapon.name)
-            weapon.damage = kwargs.get('damage', weapon.damage)
-            weapon.attribute = kwargs.get('attribute', weapon.attribute)
-            weapon.type = kwargs.get('type', weapon.type)
-            weapon.critical_damage_percentage = kwargs.get('critical_damage_percentage', weapon.critical_damage_percentage)
-            print(f"Item ID {id} updated.")
-        else:
-            print(f"Item ID {id} not found.")
 
 # 将数据保存到文件中
 def save_items_to_file(filename, items):
@@ -109,8 +67,6 @@ def save_items_to_file(filename, items):
         pickle.dump(items, f)
     print(f"Items saved to {file}.")
     items = load_items_from_file(filename)
-    if items == weapon_hash:
-        weapon_hash_check()
 
 
 # 从文件中加载数据
@@ -135,11 +91,6 @@ def load_items_from_file(filename):
         print(f"New file {filename} created.")
         return items
 
-# 遍历w_hash的items字典，打印每个物品的信息
-def print_weapons_hash():
-    for id in weapon_hash.items:
-        print(weapon_hash.get_item(id))
-    print("\n")
 
 # 遍历weapons列表，打印每个物品的信息
 def print_weapons():
@@ -147,25 +98,19 @@ def print_weapons():
         print(i)
     print("\n")
 
+
 # 根据位置获取武器的ID
 def get_weapon_id(position_id):
     if len(weapons) > position_id:
-        return weapons[position_id].id
+        return str(weapons[position_id].id)
     else:
         print("Error: The position_id is out of range.")
         return None
 
-
-
-# weapon_hash的检测
-def weapon_hash_check():
-    global weapon_hash
-    weapon_hash = load_items_from_file("weapon_hash.pkl")
-    # 如果 weapon_hash 不是 w_hash 对象，则创建一个新的 w_hash 对象
-    if not isinstance(weapon_hash, w_hash):
-        weapon_hash = w_hash()  
-        save_items_to_file("weapon_hash.pkl", weapon_hash)
-        weapon_hash = load_items_from_file("weapon_hash.pkl")
+def print_weapon_hash():
+    for i in weapon_hash:
+        print(i)
+    print("\n")
 
 #武器排序以及保存
 def sort_weapon():
@@ -176,38 +121,40 @@ def sort_weapon():
 
 # 生成武器
 def generate_weapon(i, luck):
-    weapon_hash = w_hash()
-    loaded_items = load_items_from_file("weapon_hash.pkl")
-    if isinstance(loaded_items, w_hash):
-        weapon_hash = loaded_items
-    else:
-        print("Loaded items are not an w_hash object. They are: ", type(loaded_items))
-    weapon_hash.add_item(i, luck)
-    save_items_to_file("weapons.pkl", weapons)
+    global weapon_hash
+    id = generate_unique_id(sword_name[i])
+    for id in weapon_hash:
+        if id == id:
+            id = generate_unique_id(sword_name[i])
+    weapons.append(Weapon(id, sword_name[i], weapon_random_rate(i, luck), sword_attribute[i], "sword", sword_critical_damage_percentage[i]))
     sort_weapon()
+    weapon_hash.append(id)
+    save_items_to_file("weapon_hash.pkl", weapon_hash)
+    weapon_hash = load_items_from_file("weapon_hash.pkl")
 
 #删除武器
 def delete_weapon(id_to_remove):
     global weapons
+    global weapon_hash
     if id_to_remove != None:
-        weapon_hash = load_items_from_file("weapon_hash.pkl")
+        print(f"Removing weapon with ID {id_to_remove}...")
         weapons = [weapon for weapon in weapons if weapon.id != id_to_remove]
-        weapon_hash.remove_item(id_to_remove)
-        sort_weapon()
+        weapon_hash = [id for id in weapon_hash if id != id_to_remove]
         save_items_to_file("weapon_hash.pkl", weapon_hash)
-        save_items_to_file("weapons.pkl", weapons)
-    
+        weapon_hash = load_items_from_file("weapon_hash.pkl")
+        sort_weapon()
+
 # 测试    
 weapons = load_items_from_file("weapons.pkl")
-#weapon_hash = w_hash()
 weapon_hash = load_items_from_file("weapon_hash.pkl")
-weapon_hash_check()
-print_weapons_hash()
 
-generate_weapon(0, 10)
+
+#generate_weapon(0, 10)
+delete_weapon(get_weapon_id(0))
 print_weapons()
-#delete_weapon(get_weapon_id(0))
-print_weapons_hash()
+print_weapon_hash()
+
+
 
 save_items_to_file("weapons.pkl", weapons)
 save_items_to_file("weapon_hash.pkl", weapon_hash)
