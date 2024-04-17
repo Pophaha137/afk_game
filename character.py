@@ -4,8 +4,7 @@ from Weapon import *
 
 
 class character:
-    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, Weapon=None,
-                 Armor=None):
+    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, Weapon=None, Armor=None):
         self.lv = Lv
         self.exp = Exp
         self.exp_needed = 10 * 1.1 ** self.lv
