@@ -4,12 +4,12 @@ from function import *
 
 
 def backpack(surface):
-    from Ffloor import FirstfFloor
+    from Ffloor import FirstFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"),(50,50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"),(50,50))
-    pakage = pygame.transform.scale(pygame.image.load("./resource/character/characterbackground.png"),(1280,800))
+    pakage = pygame.transform.scale(pygame.image.load("./resource/character/inventory.png"),(1080,600))
     #button
 
     esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstFloor, font,(0,0,0))

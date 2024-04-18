@@ -4,7 +4,7 @@ import os
 from function import *
 from lib import *
 from Textbutton import TButton
-from Ffloor import FirstfFloor
+from Ffloor import FirstFloor
 #screen size
 w=1280
 h=800
@@ -22,7 +22,7 @@ def Surface(surface):
     stbtnN = pygame.transform.scale(pygame.image.load("./resource/background/button/stBtnN.png").convert_alpha(),(200,50))
     stbtnD = pygame.transform.scale(pygame.image.load("./resource/background/button/stBtnD.png").convert_alpha(),(200,50))
     #button
-    stbtn = TButton(w/2-100, h/5*3, " ", stbtnN, stbtnD, None, FirstfFloor, font, (0,0,0))
+    stbtn = TButton(w/2-100, h/5*3, " ", stbtnN, stbtnD, None, FirstFloor, font, (0,0,0))
     running = True
     while running:
         for event in pygame.event.get():

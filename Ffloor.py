@@ -17,7 +17,7 @@ def FirstFloor(surface):
     cruciblei = pygame.transform.scale(pygame.image.load("./resource/function/crucible.png").convert_alpha(),(200,200))
     forgei = pygame.transform.scale(pygame.image.load("./resource/function/forge.png").convert_alpha(),(200,200))
     bloodi = pygame.transform.scale(pygame.image.load("./resource/character/blood.png").convert_alpha(),(200,100))
-    headi = pygame.transform.scale(pygame.image.load("./resource/character/head.png").convert_alpha(),(100,150))
+    headi = pygame.transform.scale(pygame.image.load("./resource/character/backpack.png").convert_alpha(),(100,150))
     doori = pygame.transform.scale(pygame.image.load("./resource/character/door.png").convert_alpha(),(100,200))
     stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stairs.png").convert_alpha(),(150,200))
 
