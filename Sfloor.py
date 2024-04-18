@@ -14,14 +14,14 @@ def SecondFloor(surface):
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
     bloodi = pygame.transform.scale(pygame.image.load("./resource/character/blood.png").convert_alpha(),(200,100))
-    headi = pygame.transform.scale(pygame.image.load("./resource/character/head.png").convert_alpha(),(100,150))
-    boxi = pygame.transform.scale(pygame.image.load("./resource/function/box.png").convert_alpha(),(200,200))
-    stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stairs.png").convert_alpha(),(150,200))
+    headi = pygame.transform.scale(pygame.image.load("./resource/character/backpack.png").convert_alpha(),(100,150))
+    boxi = pygame.transform.scale(pygame.image.load("./resource/function/chest.png").convert_alpha(),(200,200))
+    stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stair.png").convert_alpha(),(150,200))
 
     #button
     head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
     box = TButton(500, 0, " ", boxi, boxi, None, None,font, (0,0,0))
-    stairs = TButton(w-150, 0, " ", stairsi, stairsi, None, FirstfFloor,font, (0,0,0))
+    stairs = TButton(w-150, 0, " ", stairsi, stairsi, None, FirstFloor,font, (0,0,0))
 
     running = True
     while running:

@@ -14,12 +14,12 @@ def FirstFloor(surface):
     h=800
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
-    cruciblei = pygame.transform.scale(pygame.image.load("./resource/function/crucible.png").convert_alpha(),(200,200))
-    forgei = pygame.transform.scale(pygame.image.load("./resource/function/forge.png").convert_alpha(),(200,200))
+    cruciblei = pygame.transform.scale(pygame.image.load("./resource/function/AlchemyPot.png").convert_alpha(),(200,200))
+    forgei = pygame.transform.scale(pygame.image.load("./resource/function/Blacksmith.png").convert_alpha(),(200,200))
     bloodi = pygame.transform.scale(pygame.image.load("./resource/character/blood.png").convert_alpha(),(200,100))
-    headi = pygame.transform.scale(pygame.image.load("./resource/character/backpack.png").convert_alpha(),(100,150))
-    doori = pygame.transform.scale(pygame.image.load("./resource/character/door.png").convert_alpha(),(100,200))
-    stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stairs.png").convert_alpha(),(150,200))
+    headi = pygame.transform.scale(pygame.image.load("./resource/character/backpack.png").convert_alpha(),(150,150))
+    doori = pygame.transform.scale(pygame.image.load("./resource/character/AdventureDoor.png").convert_alpha(),(200,200))
+    stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stair.png").convert_alpha(),(150,200))
 
     #button
     crucible = TButton(0, 100," ", cruciblei, cruciblei, None,synthesis, font,(0,0,0))
@@ -65,4 +65,4 @@ def FirstFloor(surface):
 screen = pygame.display.set_mode((1280, 800))
 if __name__ == '__main__':
 
-    FirstfFloor(screen)
+    FirstFloor(screen)
