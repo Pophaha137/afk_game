@@ -332,38 +332,39 @@ def print_jewelry_hash():
     
 
 # 从文件中加载数据    
+
+
+#武器测试
+"""
+generate_weapon(0, 10)
+#delete_weapon(get_weapon_id(0))
+print_weapons()
+print_weapon_hash()
+
+
+#防具测试
+
+generate_armor(0, 10)
+#delete_armor(get_armor_id(0))
+print_armors()
+print_armor_hash()
+
+
+#首饰测试
+
+generate_jewelry(0, 10)
+#delete_jewelry(get_jewelry_id(0))
+print_jewelrys()
+print_jewelry_hash()
+
+"""
+
 weapons = load_items_from_file("weapons.pkl")
 weapon_hash = load_items_from_file("weapon_hash.pkl")
 armors = load_items_from_file("armors.pkl")
 armor_hash = load_items_from_file("armor_hash.pkl")
 jewelrys = load_items_from_file("jewelrys.pkl")
 jewelry_hash = load_items_from_file("jewelry_hash.pkl")
-
-#武器测试
-"""
-generate_weapon(0, 10)
-delete_weapon(get_weapon_id(0))
-print_weapons()
-print_weapon_hash()
-"""
-
-#防具测试
-"""
-generate_armor(0, 10)
-delete_armor(get_armor_id(0))
-print_armors()
-print_armor_hash()
-"""
-
-#首饰测试
-"""
-generate_jewelry(0, 10)
-delete_jewelry(get_jewelry_id(0))
-print_jewelrys()
-print_jewelry_hash()
-"""
-
-
 
 save_items_to_file("weapons.pkl", weapons)
 save_items_to_file("weapon_hash.pkl", weapon_hash)

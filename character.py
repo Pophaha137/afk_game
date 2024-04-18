@@ -1,6 +1,6 @@
 import random
 from jewelry import jewelry
-from Weapon import *
+from equipment import *
 
 
 class character:
@@ -521,12 +521,20 @@ def fight(player, opponent):
                 break
 
 
+
+
 player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
-generate_weapon(1, player.show_luck())
+generate_weapon(0, player.show_luck())
 player.show()
-show_weapon()
 player.weapon_on(weapons[0])
-player.show()
+print_weapons()
+#武器测试
+
+
+#delete_weapon(get_weapon_id(0))
+print_weapon_hash()
+print_weapons()
+
 
 generate_enemy(0, 1)
 generate_enemy(1, 2)
@@ -540,3 +548,5 @@ fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
+
+
