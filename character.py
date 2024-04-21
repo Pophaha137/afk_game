@@ -1,10 +1,9 @@
 import random
-from jewelry import jewelry
 from equipment import *
 
 
 class character:
-    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, Weapon=None, Armor=None):
+    def __init__(self, Lv, Exp, HP, Intelligence, Strength, Defense, Speed, Luck, x, y, Jewelry=None, weapon=None, Armor=None):
         self.lv = Lv
         self.exp = Exp
         self.exp_needed = 10 * 1.1 ** self.lv
@@ -22,23 +21,28 @@ class character:
         self.weapon_critical_damage_percentage = 0
 
         # 武器属性
-        if Weapon != None:
-            self.weapon = Weapon
-            self.weapon_damage = self.weapon.damage
-            self.weapon_attribute = self.weapon.attribute
-            self.weapon_type = self.weapon.type
-            self.weapon_critical_damage_percentage = self.weapon.critical_damage_percentage
+        if weapon != None:
+            self.weapon = weapon
+            self.weapon_id = weapon.id
+            self.weapon_damage = weapon.damage
+            self.weapon_attribute = weapon.attribute
+            self.weapon_type = weapon.type
+            self.weapon_critical_damage_percentage = weapon.critical_damage_percentage
         else:
+            self.weapon = None
             self.weapon_damage = 0
+            self.weapon_id = None
             self.weapon_attribute = None
             self.weapon_type = None
             self.weapon_critical_damage_percentage = 1.2
 
         # 防具属性
         if Armor != None:
+            self.armor_id = Armor.id
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
         else:
+            self.armor_id = None
             self.armor_defense = 0
             self.armor_attribute = None
 
@@ -248,12 +252,14 @@ class character:
 
     # 防具类
     def armor_on(self, armor):
+        self.armor_id = armor.id
         self.armor_defense = armor.defense
         self.armor_attribute = armor.attribute
         self.base_damage = self.base_damage_func()
         self.temp_refresh()
 
     def armor_off(self):
+        self.armor_id = None
         self.armor_defense = 0
         self.armor_attribute = None
         self.base_damage = self.base_damage_func()
@@ -280,20 +286,35 @@ class character:
 
     # 状态类
     # 状态刷新
-    def refresh(self):
-        self.damage_type = self.damage_type_func()
-        self.base_damage = self.base_damage_func()
+    def equipment_check(self):
+        for i in weapons:
+            if i.id == self.weapon_id:
+                self.weapon_on(i)
+            else:
+                self.weapon_off()
+        for i in armors:
+            if i.id == self.armor_id:
+                self.armor_on(i)
+            else:
+                self.armor_off()
+        for i in jewelrys:
+            if i.id == self.jewelry_id:
+                self.jewelry_on(i)
+            else:
+                self.jewelry_off()
+        self.temp_refresh()
+
 
     # 状态显示
     def show(self):
         print("Lv:", self.lv)
         print("Exp:", self.exp)
-        print("HP:", self.hp)
-        print("Intelligence:", self.intelligence)
-        print("Strength:", self.strength)
+        print("HP:", self.temp_hp)
+        print("Intelligence:", self.temp_intelligence)
+        print("Strength:", self.temp_strength)
         print("Defense:", self.defense + self.armor_defense)
-        print("Speed:", self.speed)
-        print("Luck:", self.luck)
+        print("Speed:", self.temp_speed)
+        print("Luck:", self.temp_luck)
         print("Weapon_attribute:", self.weapon_attribute)
         print("Weapon_type:", self.weapon_type)
         print("Armor_defense:", self.armor_defense)
@@ -304,7 +325,7 @@ class character:
         print("\n")
 
     def show_luck(self):
-        return self.luck
+        return self.temp_luck
 
 
 # 怪物各项属性
@@ -474,6 +495,7 @@ class Enemy:
 
 
 def player_attack(player, opponent):
+    player.equipment_check()
     player_damage = player.damage()
     opponent.get_hurt(player_damage, player.damage_type, player.weapon_attribute)
     print(
@@ -522,20 +544,62 @@ def fight(player, opponent):
 
 
 
-
+#测试部分
+#生成玩家
 player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
-generate_weapon(0, player.show_luck())
 player.show()
-player.weapon_on(weapons[0])
-print_weapons()
+
+"""
 #武器测试
-
-
-#delete_weapon(get_weapon_id(0))
-print_weapon_hash()
+generate_weapon(0, player.show_luck())
 print_weapons()
+print_weapon_hash()
+player.weapon_on(weapons[0])
+player.show()
+player.weapon_off()
+player.show()
+
+#防具测试
+generate_armor(0,player.show_luck())
+print_armors()
+print_armor_hash()
+player.armor_on(armors[0])
+player.show()
+player.armor_off()
+player.show()
+
+#珠宝测试
+generate_jewelry(0,1000)
+print_jewelrys()
+print_jewelry_hash()
+player.jewelry_on(jewelrys[0])
+player.show()
+player.jewelry_off()
+player.show()
+"""
+
+#删除测试
+delete_weapon(0)
+delete_armor(0)
+delete_jewelry(0)
+print("After delete:\n")
+print("Weapons:\n")
+print_weapons()
+print("Weapons Hash:\n")
+print_weapon_hash()
+print("Armors:")
+print_armors()
+print("Armors Hash:\n")
+print_armor_hash()
+print("Jewelrys:\n")
+print_jewelrys()
+print("Jewelrys Hash:\n")
+print_jewelry_hash()
 
 
+
+
+"""
 generate_enemy(0, 1)
 generate_enemy(1, 2)
 generate_enemy(2, 3)
@@ -548,5 +612,5 @@ fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
-
+"""
 
