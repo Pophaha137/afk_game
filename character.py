@@ -1,4 +1,6 @@
 import random
+import pickle
+import os
 from equipment import *
 
 
@@ -278,15 +280,26 @@ class character:
 
     # 珠宝类
     def jewelry_on(self, jewelry):
-        self.jewelry_id = jewelry.id
-        self.jewelry_name = jewelry.name
-        self.jewelry_hp = jewelry.hp
-        self.jewelry_intelligence = jewelry.intelligence
-        self.jewelry_strength = jewelry.strength
-        self.jewelry_defense = jewelry.defense
-        self.jewelry_speed = jewelry.speed
-        self.jewelry_luck = jewelry.luck
-        self.temp_refresh()
+        if jewelry != None:
+            self.jewelry_id = jewelry.id
+            self.jewelry_name = jewelry.name
+            self.jewelry_hp = jewelry.hp
+            self.jewelry_intelligence = jewelry.intelligence
+            self.jewelry_strength = jewelry.strength
+            self.jewelry_defense = jewelry.defense
+            self.jewelry_speed = jewelry.speed
+            self.jewelry_luck = jewelry.luck
+            self.temp_refresh()
+        else:
+            self.jewelry_id = None
+            self.jewelry_name = None
+            self.jewelry_hp = 0
+            self.jewelry_intelligence = 0
+            self.jewelry_strength = 0
+            self.jewelry_defense = 0
+            self.jewelry_speed = 0
+            self.jewelry_luck = 0
+            self.temp_refresh()
 
     def jewelry_off(self):
         self.jewelry_id = None
@@ -368,6 +381,47 @@ class character:
 
     def show_luck(self):
         return self.temp_luck
+    
+    def show_all(self):
+        print("Lv:", self.lv)
+        print("Exp:", self.exp)
+        print("HP:", self.hp)
+        print("Intelligence:", self.intelligence)
+        print("Strength:", self.strength)
+        print("Defense:", self.defense)
+        print("Speed:", self.speed)
+        print("Luck:", self.luck)
+        print("Temp_HP:", self.temp_hp)
+        print("Temp_Intelligence:", self.temp_intelligence)
+        print("Temp_Strength:", self.temp_strength)
+        print("Temp_Defense:", self.temp_defense)
+        print("Temp_Speed:", self.temp_speed)
+        print("Temp_Luck:", self.temp_luck)
+        print("Base_damage:", self.base_damage)
+        print("Critical_damage_percentage:", self.critical_damage_percentage)
+        if self.weapon_id != None:
+            print("Weapon:", self.weapon_name)
+            print("Weapon_attribute:", self.weapon_attribute)
+            print("Weapon_type:", self.weapon_type)
+            print("Weapon_damage:", self.weapon_damage)
+        else:
+            print("Weapon: None")
+        if self.armor_id != None:
+            print("Armor:", self.armor_name)
+            print("Armor_defense:", self.armor_defense)
+            print("Armor_attribute:", self.armor_attribute)
+        else:
+            print("Armor: None")
+        if self.jewelry_id != None:
+            print("Jewelry:", self.jewelry_name)
+            print("Jewelry_hp:", self.jewelry_hp)
+            print("Jewelry_intelligence:", self.jewelry_intelligence)
+            print("Jewelry_strength:", self.jewelry_strength)
+            print("Jewelry_defense:", self.jewelry_defense)
+            print("Jewelry_speed:", self.jewelry_speed)
+            print("Jewelry_luck:", self.jewelry_luck)
+        else:
+            print("Jewelry: None")
 
 
 # 怪物各项属性
@@ -587,10 +641,32 @@ def fight(player, opponent):
 
 
 #测试部分
-#生成玩家
-player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
-player.show()
+# 保存player数据
 
+
+def load_player():
+    with open('data/player.pkl', 'rb') as input:
+        player = pickle.load(input)
+        return player
+
+def check_player():
+    # 确保data文件夹存在，否则创建
+    if not os.path.exists('data'):
+        os.makedirs('data')
+    # 确保player.pkl存在，否则创建
+    if not os.path.exists('data/player.pkl'):
+        with open('data/player.pkl', 'wb') as output:
+            player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
+            pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
+    else:
+        player = load_player()
+
+def save_player():
+    with open('data/player.pkl', 'wb') as output:
+        pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
+
+check_player()
+player = load_player()
 
 #武器测试
 generate_weapon(0, player.show_luck())
@@ -611,10 +687,11 @@ player.show()
 #player.show()
 
 #珠宝测试
-generate_jewelry(0,1000)
+generate_jewelry(0,player.show_luck())
 print_jewelrys()
 print_jewelry_hash()
-player.jewelry_on(jewelrys[0])
+if len(jewelrys) != 0:
+    player.jewelry_on(jewelrys[0])
 player.show()
 #player.jewelry_off()
 #player.show()
@@ -657,4 +734,5 @@ fight(player, enemy[0])
 fight(player, enemy[0])
 fight(player, enemy[0])
 
-
+player.show_all()
+save_player()
