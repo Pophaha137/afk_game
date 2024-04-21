@@ -279,7 +279,6 @@ def sort_jewelry():
     with open(os.path.join('data', 'jewelrys.pkl'), 'wb') as f:
         pickle.dump(jewelrys, f)
 
-
 # 生成首饰    
 def generate_jewelry(i, luck):
     global jewelry_hash
@@ -315,16 +314,11 @@ def delete_jewelry(position_id):
         jewelry_hash = load_items_from_file("jewelry_hash.pkl")
         sort_jewelry()
 
-
 # 打印首饰列表
 def print_jewelrys():
     for i in jewelrys:
         print(i)
     print("\n")
-
-
-
-    
 
 # 打印首饰ID列表
 def print_jewelry_hash():
@@ -332,10 +326,29 @@ def print_jewelry_hash():
         print(i)
     print("\n")
 
+def w_id_to_position_id(id):
+    if id == None:
+        return None
+    for i in range(len(weapons)):
+        if weapons[i].id == id:
+            return i
+    return None
 
-    
+def a_id_to_position_id(id):
+    if id == None:
+        return None
+    for i in range(len(armors)):
+        if armors[i].id == id:
+            return i
+    return None
 
-# 从文件中加载数据    
+def j_id_to_position_id(id):
+    if id == None:
+        return None
+    for i in range(len(jewelrys)):
+        if jewelrys[i].id == id:
+            return i
+    return None
 
 
 #武器测试
@@ -370,6 +383,7 @@ armor_hash = load_items_from_file("armor_hash.pkl")
 jewelrys = load_items_from_file("jewelrys.pkl")
 jewelry_hash = load_items_from_file("jewelry_hash.pkl")
 
+"""
 print("Weapons:\n")
 print_weapons()
 print("Weapons Hash:\n")
@@ -382,6 +396,7 @@ print("Jewelrys:\n")
 print_jewelrys()
 print("Jewelrys Hash:\n")
 print_jewelry_hash()
+"""
 
 save_items_to_file("weapons.pkl", weapons)
 save_items_to_file("weapon_hash.pkl", weapon_hash)
