@@ -23,6 +23,7 @@ class character:
         # 武器属性
         if weapon != None:
             self.weapon = weapon
+            self.weapon_name = weapon.name
             self.weapon_id = weapon.id
             self.weapon_damage = weapon.damage
             self.weapon_attribute = weapon.attribute
@@ -30,6 +31,7 @@ class character:
             self.weapon_critical_damage_percentage = weapon.critical_damage_percentage
         else:
             self.weapon = None
+            self.weapon_name = None
             self.weapon_damage = 0
             self.weapon_id = None
             self.weapon_attribute = None
@@ -39,15 +41,19 @@ class character:
         # 防具属性
         if Armor != None:
             self.armor_id = Armor.id
+            self.armor_name = Armor.name
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
         else:
+            self.armor_name = None
             self.armor_id = None
             self.armor_defense = 0
             self.armor_attribute = None
 
         # 珠宝属性
         if Jewelry != None:
+            self.jewelry_id = Jewelry.id
+            self.jewelry_name = Jewelry.name
             self.jewelry_hp = Jewelry.hp
             self.jewelry_intelligence = Jewelry.intelligence
             self.jewelry_strength = Jewelry.strength
@@ -55,6 +61,8 @@ class character:
             self.jewelry_speed = Jewelry.speed
             self.jewelry_luck = Jewelry.luck
         else:
+            self.jewelry_name = None
+            self.jewelry_id = None
             self.jewelry_hp = 0
             self.jewelry_intelligence = 0
             self.jewelry_strength = 0
@@ -253,6 +261,7 @@ class character:
     # 防具类
     def armor_on(self, armor):
         self.armor_id = armor.id
+        self.armor_name = armor.name
         self.armor_defense = armor.defense
         self.armor_attribute = armor.attribute
         self.base_damage = self.base_damage_func()
@@ -260,6 +269,7 @@ class character:
 
     def armor_off(self):
         self.armor_id = None
+        self.armor_name = None
         self.armor_defense = 0
         self.armor_attribute = None
         self.base_damage = self.base_damage_func()
@@ -267,6 +277,8 @@ class character:
 
     # 珠宝类
     def jewelry_on(self, jewelry):
+        self.jewelry_id = jewelry.id
+        self.jewelry_name = jewelry.name
         self.jewelry_hp = jewelry.hp
         self.jewelry_intelligence = jewelry.intelligence
         self.jewelry_strength = jewelry.strength
@@ -276,6 +288,8 @@ class character:
         self.temp_refresh()
 
     def jewelry_off(self):
+        self.jewelry_id = None
+        self.jewelry_name = None
         self.jewelry_hp = 0
         self.jewelry_intelligence = 0
         self.jewelry_strength = 0
@@ -315,13 +329,23 @@ class character:
         print("Defense:", self.defense + self.armor_defense)
         print("Speed:", self.temp_speed)
         print("Luck:", self.temp_luck)
+        print("Weapon:", self.weapon_name)
         print("Weapon_attribute:", self.weapon_attribute)
         print("Weapon_type:", self.weapon_type)
+        print("Weapon_damage:", self.weapon_damage)
+        print("Armor:", self.armor_name)
         print("Armor_defense:", self.armor_defense)
         print("Armor_attribute:", self.armor_attribute)
+        print("Jewelry:", self.jewelry_name)
+        print("Jewelry_hp:", self.jewelry_hp)
+        print("Jewelry_intelligence:", self.jewelry_intelligence)
+        print("Jewelry_strength:", self.jewelry_strength)
+        print("Jewelry_defense:", self.jewelry_defense)
+        print("Jewelry_speed:", self.jewelry_speed)
+        print("Jewelry_luck:", self.jewelry_luck)
         print("Base_damage:", self.base_damage)
         print("Critical_damage_percentage:", self.critical_damage_percentage)
-        print("Jewelry:", self.jewelry)
+        
         print("\n")
 
     def show_luck(self):
@@ -549,7 +573,7 @@ def fight(player, opponent):
 player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
 player.show()
 
-"""
+
 #武器测试
 generate_weapon(0, player.show_luck())
 print_weapons()
@@ -576,7 +600,7 @@ player.jewelry_on(jewelrys[0])
 player.show()
 player.jewelry_off()
 player.show()
-"""
+
 
 #删除测试
 delete_weapon(0)
