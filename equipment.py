@@ -137,9 +137,10 @@ def generate_weapon(i, luck):
     weapon_hash = load_items_from_file("weapon_hash.pkl")
 
 #删除武器
-def delete_weapon(id_to_remove):
+def delete_weapon(position_id):
     global weapons
     global weapon_hash
+    id_to_remove = get_weapon_id(position_id)
     if id_to_remove != None:
         print(f"Removing weapon with ID {id_to_remove}...")
         weapons = [weapon for weapon in weapons if weapon.id != id_to_remove]
@@ -178,10 +179,19 @@ def generate_armor(i, luck):
     save_items_to_file("armor_hash.pkl", armor_hash)
     armor_hash = load_items_from_file("armor_hash.pkl")
 
+# 根据位置获取防具的ID
+def get_armor_id(position_id):
+    if len(armors) > position_id:
+        return str(armors[position_id].id)
+    else:
+        print("Error: The position_id is out of range.")
+        return None
+    
 # 删除防具
-def delete_armor(id_to_remove):
+def delete_armor(position_id):
     global armors
     global armor_hash
+    id_to_remove = get_armor_id(position_id)
     if id_to_remove != None:
         print(f"Removing armor with ID {id_to_remove}...")
         armors = [armor for armor in armors if armor.id != id_to_remove]
@@ -195,14 +205,6 @@ def print_armors():
     for i in armors:
         print(i)
     print("\n")
-
-# 根据位置获取防具的ID
-def get_armor_id(position_id):
-    if len(armors) > position_id:
-        return str(armors[position_id].id)
-    else:
-        print("Error: The position_id is out of range.")
-        return None
     
 # 打印防具ID列表
 def print_armor_hash():
@@ -292,11 +294,19 @@ def generate_jewelry(i, luck):
         save_items_to_file("jewelry_hash.pkl", jewelry_hash)
         jewelry_hash = load_items_from_file("jewelry_hash.pkl")
 
-
+# 根据位置获取首饰的ID
+def get_jewelry_id(position_id):
+    if len(jewelrys) > position_id:
+        return str(jewelrys[position_id].id)
+    else:
+        print("Error: The position_id is out of range.")
+        return None
+    
 # 删除首饰
-def delete_jewelry(id_to_remove):
+def delete_jewelry(position_id):
     global jewelrys
     global jewelry_hash
+    id_to_remove = get_jewelry_id(position_id)
     if id_to_remove != None:
         print(f"Removing jewelry with ID {id_to_remove}...")
         jewelrys = [jewelry for jewelry in jewelrys if jewelry.id != id_to_remove]
@@ -313,13 +323,7 @@ def print_jewelrys():
     print("\n")
 
 
-# 根据位置获取首饰的ID
-def get_jewelry_id(position_id):
-    if len(jewelrys) > position_id:
-        return str(jewelrys[position_id].id)
-    else:
-        print("Error: The position_id is out of range.")
-        return None
+
     
 
 # 打印首饰ID列表
