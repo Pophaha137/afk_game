@@ -1,8 +1,9 @@
 import pygame
 from Textbutton import TButton
 from function import *
+from equipment import weapon, armor, jewelry
 from equipment import *
-
+import pickle
 
 def print_img(surface, print_page):
     page = 0
