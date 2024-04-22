@@ -4,6 +4,7 @@ import hashlib
 import random
 import pickle
 import os
+import pygame
 
 #武器数据
 sword_name = ["God_bless","God_curse","God_sword","God_axe","God_bow","God_staff","God_wand","God_knife","God_spear","God_shield"]
@@ -30,7 +31,7 @@ def weapon_random_rate(i, luck):
 
 
 # 定义武器类
-class Weapon:
+class weapon:
     def __init__(self, id, name, damage, attribute, type, critical_damage_percentage):
         self.id = id
         self.name = name
@@ -39,6 +40,7 @@ class Weapon:
         self.type = type
         self.critical_damage_percentage = critical_damage_percentage
         self.percentage = 0
+        self.img = self.get_img()
 
     def __str__(self):
         return f"{self.name} ({self.type}) - {self.damage:.2f} {self.attribute} damage, {self.critical_damage_percentage:.1f}% critical damage"
@@ -55,20 +57,29 @@ class Weapon:
     def weapon_critical_damage_percentage(self):
         return self.critical_damage_percentage
 
-
-
+    def get_img(self):
+        img = pygame.image.load(f"./resource/weapon/{self.name}.png")
+        img = pygame.transform.scale(img, (50, 50))
+        return img
+    
 # 将数据保存到文件中
 def save_items_to_file(filename, items):
     directory = 'data'
+    temp = items
+    if filename == "weapons.pkl" or filename == "armors.pkl" or filename == "jewelrys.pkl":
+        for i in temp:
+            i.img = None
     file = os.path.join(directory, filename)
     # 如果文件夹不存在则创建文件夹
     if not os.path.exists(directory):
         os.makedirs(directory)
     # 将数据保存到文件中
     with open(file, 'wb') as f:
-        pickle.dump(items, f)
+        pickle.dump(temp, f)
     print(f"Items saved to {file}.")
-    items = load_items_from_file(filename)
+    while len(temp) > 0:
+        temp.pop()
+  
 
 
 # 从文件中加载数据
@@ -83,6 +94,9 @@ def load_items_from_file(filename):
         with open(filename, 'rb') as f:
             items = pickle.load(f)
         print(f"Items loaded from {filename}.")
+        if filename == "weapons.pkl" or filename == "armors.pkl" or filename == "jewelrys.pkl":
+            for i in items:
+                i.img = i.self.get_img()
         return items
     # 如果文件不存在则创建一个新文件
     else:
@@ -119,9 +133,12 @@ def print_weapon_hash():
 #武器排序以及保存
 def sort_weapon():
     weapons.sort(key=lambda x: x.damage, reverse=True)
+    temp = weapons
+    for i in temp:
+        i.img = None
     # 将 weapons 列表保存到文件中
     with open(os.path.join('data', 'weapons.pkl'), 'wb') as f:
-        pickle.dump(weapons, f)
+        pickle.dump(temp, f)
 
 # 生成武器
 def generate_weapon(i, luck):
@@ -130,11 +147,12 @@ def generate_weapon(i, luck):
     for id in weapon_hash:
         if id == id:
             id = generate_unique_id(sword_name[i])
-    weapons.append(Weapon(id, sword_name[i], weapon_random_rate(i, luck), sword_attribute[i], "sword", sword_critical_damage_percentage[i]))
+    weapons.append(weapon(id, sword_name[i], weapon_random_rate(i, luck), sword_attribute[i], "sword", sword_critical_damage_percentage[i]))
     sort_weapon()
     weapon_hash.append(id)
-    save_items_to_file("weapon_hash.pkl", weapon_hash)
-    weapon_hash = load_items_from_file("weapon_hash.pkl")
+    temp = weapon_hash
+    save_items_to_file("weapon_hash.pkl",temp)
+    
 
 #删除武器
 def delete_weapon(position_id):
@@ -145,8 +163,8 @@ def delete_weapon(position_id):
         print(f"Removing weapon with ID {id_to_remove}...")
         weapons = [weapon for weapon in weapons if weapon.id != id_to_remove]
         weapon_hash = [id for id in weapon_hash if id != id_to_remove]
-        save_items_to_file("weapon_hash.pkl", weapon_hash)
-        weapon_hash = load_items_from_file("weapon_hash.pkl")
+        temp = weapon_hash
+        save_items_to_file("weapon_hash.pkl", temp)
         sort_weapon()
 
 armor_name = ["God_armor","God_helmet","God_gloves","God_boots","God_ring","God_necklace","God_belt","God_cloak","God_bracelet","God_earring"]
@@ -162,9 +180,12 @@ def armor_random_rate(i, luck):
 # 防具排序以及保存
 def sort_armor():
     armors.sort(key=lambda x: x.defense, reverse=True)
+    temp = armors
+    for i in temp:
+        i.img = None
     # 将 armors 列表保存到文件中
     with open(os.path.join('data', 'armors.pkl'), 'wb') as f:
-        pickle.dump(armors, f)
+        pickle.dump(temp, f)
 
 # 打印防具列表
 def generate_armor(i, luck):
@@ -176,8 +197,8 @@ def generate_armor(i, luck):
     armors.append(armor(id, armor_name[i], armor_random_rate(i, luck), armor_attribute[i]))
     sort_armor()
     armor_hash.append(id)
-    save_items_to_file("armor_hash.pkl", armor_hash)
-    armor_hash = load_items_from_file("armor_hash.pkl")
+    temp = armor_hash
+    save_items_to_file("armor_hash.pkl", temp)
 
 # 根据位置获取防具的ID
 def get_armor_id(position_id):
@@ -196,8 +217,8 @@ def delete_armor(position_id):
         print(f"Removing armor with ID {id_to_remove}...")
         armors = [armor for armor in armors if armor.id != id_to_remove]
         armor_hash = [id for id in armor_hash if id != id_to_remove]
-        save_items_to_file("armor_hash.pkl", armor_hash)
-        armor_hash = load_items_from_file("armor_hash.pkl")
+        temp = armor_hash
+        save_items_to_file("armor_hash.pkl", temp)
         sort_armor()
 
 # 打印防具列表
@@ -219,6 +240,7 @@ class armor:
         self.name = name
         self.defense = defense
         self.attribute = attribute
+        self.img = self.get_img()
 
     def __str__(self):
         return f"{self.name} - {self.defense:.2f} {self.attribute} defense"
@@ -228,6 +250,11 @@ class armor:
     
     def armor_attribute(self):
         return self.attribute
+    
+    def get_img(self):
+        img = pygame.image.load(f"./resource/armor/{self.name}.png")
+        img = pygame.transform.scale(img, (50, 50))
+        return img
 
 jewelry_name = ["God_ring","God_necklace","God_belt","God_cloak","God_bracelet","God_earring"]
 jewelry_hp =            [10,10,10,10,10,10]
@@ -248,6 +275,7 @@ class jewelry:
         self.speed = speed
         self.luck = luck
         self.defense = defense
+        self.img = self.get_img()
 
     def __str__(self):
         return f"{self.name} - {self.hp:.2f} hp, {self.intelligence:.2f} intelligence, {self.strength:.2f} strength, {self.speed:.2f} speed, {self.luck:.2f} luck, {self.defense:.2f} defense"
@@ -270,14 +298,22 @@ class jewelry:
     def jewelry_defense(self):
         return self.defense
     
+    def get_img(self):
+        img = pygame.image.load(f"./resource/jewelry/{self.name}.png")
+        img = pygame.transform.scale(img, (50, 50))
+        return img
+    
 
 
 # 首饰排序以及保存
 def sort_jewelry():
-    jewelrys.sort(key=lambda x: x.hp, reverse=True)
+    temp = jewelrys.sort(key=lambda x: x.hp, reverse=True)
+    # 将 jewelrys 类的图像清除后保存
+    for i in temp:
+        i.img = None
     # 将 jewelrys 列表保存到文件中
     with open(os.path.join('data', 'jewelrys.pkl'), 'wb') as f:
-        pickle.dump(jewelrys, f)
+        pickle.dump(temp, f)
 
 # 生成首饰    
 def generate_jewelry(i, luck):
@@ -290,8 +326,8 @@ def generate_jewelry(i, luck):
         jewelrys.append(jewelry(id, jewelry_name[i], jewelry_hp[i], jewelry_intelligence[i], jewelry_strength[i], jewelry_speed[i], jewelry_luck[i], jewelry_defense[i]))
         sort_jewelry()
         jewelry_hash.append(id)
-        save_items_to_file("jewelry_hash.pkl", jewelry_hash)
-        jewelry_hash = load_items_from_file("jewelry_hash.pkl")
+        temp = jewelry_hash
+        save_items_to_file("jewelry_hash.pkl", temp)
 
 # 根据位置获取首饰的ID
 def get_jewelry_id(position_id):
@@ -310,8 +346,8 @@ def delete_jewelry(position_id):
         print(f"Removing jewelry with ID {id_to_remove}...")
         jewelrys = [jewelry for jewelry in jewelrys if jewelry.id != id_to_remove]
         jewelry_hash = [id for id in jewelry_hash if id != id_to_remove]
-        save_items_to_file("jewelry_hash.pkl", jewelry_hash)
-        jewelry_hash = load_items_from_file("jewelry_hash.pkl")
+        temp = jewelry_hash
+        save_items_to_file("jewelry_hash.pkl", temp)
         sort_jewelry()
 
 # 打印首饰列表
@@ -350,9 +386,34 @@ def j_id_to_position_id(id):
             return i
     return None
 
+# 从文件中加载数据
+def load_items_from_file(filename):
+    directory = 'data'
+    filename = os.path.join(directory, filename)
+    # 如果文件夹不存在则创建文件夹
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    # 如果文件存在则加载数据
+    if os.path.exists(filename):
+        with open(filename, 'rb') as f:
+            items = pickle.load(f)
+        print(f"Items loaded from {filename}.")
+        if filename == "weapons.pkl" or filename == "armors.pkl" or filename == "jewelrys.pkl":
+            for i in items:
+                i.img = i.self.get_img()
+        return items
+    # 如果文件不存在则创建一个新文件
+    else:
+        print(f"File {filename} does not exist. Creating a new file.")
+        items = []
+        with open(filename, 'wb') as f:
+            pickle.dump(items, f)
+        print(f"New file {filename} created.")
+        return items
 
-#武器测试
 """
+#武器测试
+
 generate_weapon(0, 10)
 #delete_weapon(get_weapon_id(0))
 print_weapons()
@@ -383,10 +444,15 @@ armor_hash = load_items_from_file("armor_hash.pkl")
 jewelrys = load_items_from_file("jewelrys.pkl")
 jewelry_hash = load_items_from_file("jewelry_hash.pkl")
 
+generate_weapon(0, 10)
+generate_weapon(0, 10)
+generate_weapon(0, 10)
+generate_weapon(0, 10)
+
 """
-print("Weapons:\n")
+print("weapons:\n")
 print_weapons()
-print("Weapons Hash:\n")
+print("weapons Hash:\n")
 print_weapon_hash()
 print("Armors:")
 print_armors()
