@@ -28,7 +28,7 @@ class Weapon:
 
     def get_img(self):
         img = pygame.image.load(f"./resource/weapon/{self.name}.png")
-        img = pygame.transform.scale(img, (89, 101))
+        img = pygame.transform.scale(img, (89, 91))
         return img
     
 class Armor:
