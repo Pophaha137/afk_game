@@ -45,10 +45,4 @@ def Surface(surface):
         pygame.display.flip()
 
 if __name__ == '__main__':
-    weapons =       load_items_from_file("weapons.pkl")
-    weapon_hash =   load_items_from_file("weapon_hash.pkl")
-    armors =        load_items_from_file("armors.pkl")
-    armor_hash =    load_items_from_file("armor_hash.pkl")
-    jewelrys =      load_items_from_file("jewelrys.pkl")
-    jewelry_hash =  load_items_from_file("jewelry_hash.pkl")
     Surface(screen)

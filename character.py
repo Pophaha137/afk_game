@@ -1,7 +1,9 @@
 import random
-import pickle
 import os
+import pygame
+from class_define import *
 from equipment import *
+import pickle
 
 
 class character:
@@ -30,6 +32,7 @@ class character:
             self.weapon_attribute = weapon.attribute
             self.weapon_type = weapon.type
             self.weapon_critical_damage_percentage = weapon.critical_damage_percentage
+            self.weapon_img = weapon.img
         else:
             self.weapon_name = None
             self.weapon_damage = 0
@@ -37,6 +40,7 @@ class character:
             self.weapon_attribute = None
             self.weapon_type = None
             self.weapon_critical_damage_percentage = 1.2
+            self.weapon_img = None
 
         # 防具属性
         if Armor != None:
@@ -44,11 +48,13 @@ class character:
             self.armor_name = Armor.name
             self.armor_defense = Armor.defense
             self.armor_attribute = Armor.attribute
+            self.armor_img = Armor.img
         else:
             self.armor_name = None
             self.armor_id = None
             self.armor_defense = 0
             self.armor_attribute = None
+            self.armor_img = None
 
         # 珠宝属性
         if Jewelry != None:
@@ -60,6 +66,7 @@ class character:
             self.jewelry_defense = Jewelry.defense
             self.jewelry_speed = Jewelry.speed
             self.jewelry_luck = Jewelry.luck
+            self.jewelry_img = Jewelry.img
         else:
             self.jewelry_name = None
             self.jewelry_id = None
@@ -69,6 +76,7 @@ class character:
             self.jewelry_defense = 0
             self.jewelry_speed = 0
             self.jewelry_luck = 0
+            self.jewelry_img = None
 
         # 战斗属性
         self.temp_hp = self.hp + self.jewelry_hp
@@ -251,6 +259,7 @@ class character:
         self.weapon_type = Weapon.type
         self.critical_damage_percentage = Weapon.critical_damage_percentage
         self.base_damage = self.base_damage_func()
+        self.weapon_img = Weapon.img
 
     def weapon_off(self):
         self.weapon_id = None
@@ -260,6 +269,7 @@ class character:
         self.weapon_type = None
         self.critical_damage_percentage = 1.2
         self.base_damage = self.base_damage_func()
+        self.weapon_img = None
 
     # 防具类
     def armor_on(self, armor):
@@ -269,6 +279,7 @@ class character:
         self.armor_attribute = armor.attribute
         self.base_damage = self.base_damage_func()
         self.temp_refresh()
+        self.armor_img = armor.img
 
     def armor_off(self):
         self.armor_id = None
@@ -277,6 +288,7 @@ class character:
         self.armor_attribute = None
         self.base_damage = self.base_damage_func()
         self.temp_refresh()
+        self.armor_img = None
 
     # 珠宝类
     def jewelry_on(self, jewelry):
@@ -290,6 +302,7 @@ class character:
             self.jewelry_speed = jewelry.speed
             self.jewelry_luck = jewelry.luck
             self.temp_refresh()
+            self.jewelry_img = jewelry.img
         else:
             self.jewelry_id = None
             self.jewelry_name = None
@@ -300,6 +313,7 @@ class character:
             self.jewelry_speed = 0
             self.jewelry_luck = 0
             self.temp_refresh()
+            self.jewelry_img = None
 
     def jewelry_off(self):
         self.jewelry_id = None
@@ -311,6 +325,7 @@ class character:
         self.jewelry_speed = 0
         self.jewelry_luck = 0
         self.temp_refresh()
+        self.jewelry_img = None
 
     # 状态类
     # 状态刷新

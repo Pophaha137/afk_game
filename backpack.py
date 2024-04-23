@@ -1,9 +1,8 @@
 import pygame
 from Textbutton import TButton
 from function import *
-from equipment import weapon, armor, jewelry
 from equipment import *
-import pickle
+
 
 def print_img(surface, print_page):
     page = 0
@@ -47,7 +46,6 @@ def backpack(surface):
     #背包物品展示
     select_position_id = -1  # 选中的物品的索引
     print_page = 0  # 当前选择页数
-    print_img(surface, print_page)
 
     
 
@@ -68,6 +66,7 @@ def backpack(surface):
                 esc.mouseUp(mx,my)
             surface.blit(pakage,(0,0))
             esc.draw(screen)
+            print_img(screen, 0)
         pygame.display.flip()
 
 
