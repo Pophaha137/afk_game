@@ -34,6 +34,24 @@ def print_img(surface, print_page):
             y += img.get_height() + 10  # 更新y坐标以便下一个图片在新的一行
             count = 0  # 重置当前行的物品数量
 
+def position_id(mx, my):
+    x = 100
+    y = 100
+    count = 0
+    for i in range(24):
+        img = weapons[i].get_img()
+        if x <= mx <= x + img.get_width() and y <= my <= y + img.get_height():
+            print (i)
+            return i
+        x += img.get_width() + 10
+        count += 1
+        if count == 6:
+            x = 100
+            y += img.get_height() + 10
+            count = 0
+    print (-1)
+    return -1
+
 
 def backpack(surface):
     from Ffloor import FirstFloor
@@ -55,6 +73,7 @@ def backpack(surface):
     while running:
         for event in pygame.event.get():
             mx,my = pygame.mouse.get_pos()
+            position_id(mx, my)
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.MOUSEMOTION:
