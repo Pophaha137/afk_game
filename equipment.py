@@ -364,13 +364,13 @@ generate_weapon(0, 10)
 generate_weapon(0, 10)
 generate_weapon(0, 10)
 generate_weapon(0, 10)
-"""
+
 
 print("weapons:\n")
 print_weapons()
 print("weapons Hash:\n")
 print_weapon_hash()
-
+"""
 
 
 """

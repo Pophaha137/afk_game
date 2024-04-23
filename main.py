@@ -26,6 +26,8 @@ def Surface(surface):
     #button
     stbtn = TButton(w/2-100, h/5*3, " ", stbtnN, stbtnD, None, FirstFloor, font, (0,0,0))
     running = True
+    screen.fill((255, 255, 255))
+    stbtn.draw(screen)
     while running:
         for event in pygame.event.get():
             mx,my = pygame.mouse.get_pos()
@@ -38,9 +40,9 @@ def Surface(surface):
                         stbtn.mouseDown(mx,my)
             elif event.type == pygame.MOUSEBUTTONUP:
                 stbtn.mouseUp(mx,my)
-            screen.fill((255, 255, 255))
-            stbtn.draw(screen)
-            surface.blit(surTitle,(w/2-surTitle.get_width()/2,h/3))
+        #screen.fill((255, 255, 255))
+        #stbtn.draw(screen)
+        surface.blit(surTitle,(w/2-surTitle.get_width()/2,h/3))
 
         pygame.display.flip()
 
