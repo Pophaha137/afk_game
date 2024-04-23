@@ -10,7 +10,7 @@ from class_define import Weapon, Armor, Jewelry
 #pygame.init()
 
 #武器数据
-sword_name = ["God_bless","God_curse","God_sword","God_axe","God_bow","God_staff","God_wand","God_knife","God_spear","God_shield"]
+sword_name = ["flame_scepter","flame_wand","frozen_sword","healing_wand","light_spear","posion_dagger","sand_wand","ice_wand","hero_sword","abyssal_scepter"]
 sword_base_damage = [10,10,10,10,10,10,10,10,10,10]
 sword_attribute = ["light","dark","light","dark","light","dark","light","dark","light","dark"]
 sword_critical_damage_percentage = [1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4]
@@ -205,7 +205,7 @@ def print_armor_hash():
 
 # 定义防具类
 
-jewelry_name = ["God_ring","God_necklace","God_belt","God_cloak","God_bracelet","God_earring"]
+jewelry_name = ["HP_Gem","INT_Gem","STR_Gem","SPD_Gem","LUK_Gem","DEF_Gem"]
 jewelry_hp =            [10,10,10,10,10,10]
 jewelry_intelligence =  [10,10,10,10,10,10]
 jewelry_strength =      [10,10,10,10,10,10]
