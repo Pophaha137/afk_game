@@ -1,7 +1,9 @@
 import pygame
+import json
 from Textbutton import TButton
 from function import *
 from equipment import *
+
 
 
 def print_img(surface, print_page, page=0):
@@ -37,24 +39,79 @@ def print_img(surface, print_page, page=0):
 
 
 def position_id(mx, my):
-    x = 375
-    y = 60
+    x = 368
+    y = 42
     count = 0
-    for i in range(24):
-        if x < mx < x + 50 and y < my < y + 50:
-            print (i)
+    for i in range(30):
+        if x < mx < x + 89 and y < my < y + 91:
+            #print (i)
             return i
-        x += 50 + 10
+        x += 89 + 9
         count += 1
         if count == 6:
-            x = 100
-            y += 50 + 10
+            x = 368
+            y += 91 + 16
             count = 0
-    print(-1)
+    #print(-1)
     return -1
 
+def print_text(surface, text, x, y, font_size, color):
+    font = pygame.font.Font(None, font_size)
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (x, y)  # 设置文本矩形的左上角坐标
+    surface.blit(text_surface, text_rect)
+
+def print_title(surface, print_page):
+    x = 45
+    y = 100
+    size = 40
+    if print_page == 0:
+        print_text(surface, "Weapon",   x, y, size, (0, 0, 0))
+    elif print_page == 1:
+        print_text(surface, "Armor",    x, y, size, (0, 0, 0))
+    elif print_page == 2:
+        print_text(surface, "Jewelry",  x, y, size, (0, 0, 0))
+
+def print_info(surface, print_page, page, position_id):
+    size = 26
+    x = 45
+    y = 150
+    if position_id != -1:
+        i = position_id + page * 30
+        if print_page == 0 :
+            weapons = load_items_from_file("weapons.pkl")
+            if i < len(weapons):
+                item = weapons[i]
+                text_dict = item.to_dict()
+                
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20  # 更新y坐标以便下一个文本在新的一行
+        elif print_page == 1 :
+            armors = load_items_from_file("armors.pkl")
+            if i < len(armors):
+                item = armors[i]
+                text_dict = item.to_dict()
+                
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20  # 更新y坐标以便下一个文本在新的一行
+        elif print_page == 2 :
+            jewelrys = load_items_from_file("jewelrys.pkl")
+            if i < len(jewelrys):
+                item = jewelrys[i]
+                text_dict = item.to_dict()
+                
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20  # 更新y坐标以便下一个文本在新的一行
 
 def backpack(surface):
+    mx, my = 0, 0
     page = 0
     from Ffloor import FirstFloor
     # 时钟
@@ -93,13 +150,14 @@ def backpack(surface):
                         if page <= 18:
                             page += 1
                     elif 900 < mx < 1000 and 600 < my < 700:
+                        if print_page != 0:
+                            print_page -= 1
+                            page = 0
+                        
+                    elif 1000 < mx < 1100 and 600 < my < 700:
                         print_page += 1
                         if print_page == 3:
                             print_page = 0
-                            page = 0
-                    elif 1000 < mx < 1100 and 600 < my < 700:
-                        if print_page != 0:
-                            print_page -= 1
                             page = 0
 
                     else:
@@ -121,6 +179,8 @@ def backpack(surface):
 
         esc.draw(screen)
         print_img(screen, print_page, page)
+        print_title(screen, print_page)
+        print_info(screen, print_page, page, position_id(mx, my))
         pygame.display.flip()
         clock.tick(60)
 

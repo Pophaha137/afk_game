@@ -31,6 +31,15 @@ class Weapon:
         img = pygame.transform.scale(img, (89, 91))
         return img
     
+    def to_dict(self):
+        return {
+            "Name": f"{self.name}",
+            "Damage": f"{self.damage:.2f}",
+            "Attribute": f"{self.attribute}",
+            "Type": f"{self.type}",
+            "Critical Damage Percentage": f"{self.critical_damage_percentage}"
+        }
+    
 class Armor:
     def __init__(self, id, name, defense, attribute):
         self.id = id
@@ -50,9 +59,15 @@ class Armor:
     
     def get_img(self):
         img = pygame.image.load(f"./resource/armor/{self.name}.png")
-        img = pygame.transform.scale(img, (50, 50))
+        img = pygame.transform.scale(img, (89, 91))
         return img
 
+    def to_dict(self):
+        return {
+            "Name": f"{self.name}",
+            "Defense": f"{self.defense:.2f}",
+            "Attribute": f"{self.attribute}"
+        }
     
 class Jewelry:
     def __init__(self, id, name, hp, intelligence, strength, speed, luck, defense):
@@ -89,6 +104,17 @@ class Jewelry:
     
     def get_img(self):
         img = pygame.image.load(f"./resource/jewelry/{self.name}.png")
-        img = pygame.transform.scale(img, (50, 50))
+        img = pygame.transform.scale(img, (89, 91))
         return img
+    
+    def to_dict(self):
+        return {
+            "Name": f"{self.name}",
+            "Hp": f"{self.hp}",
+            "Intelligence": f"{self.intelligence}",
+            "Strength": f"{self.strength}",
+            "Speed": f"{self.speed}",
+            "Luck": f"{self.luck}",
+            "Defense": f"{self.defense}"
+        }
     

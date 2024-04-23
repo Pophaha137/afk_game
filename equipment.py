@@ -48,7 +48,7 @@ def save_items_to_file(filename, items):
     # 将数据保存到文件中
     with open(file, 'wb') as f:
         pickle.dump(items, f)
-    print(f"Items saved to {file}.")
+    #print(f"Items saved to {file}.")
     items = load_items_from_file(filename)
 
     # 从文件中加载数据
@@ -63,7 +63,7 @@ def load_items_from_file(filename):
     if os.path.exists(file):
         with open(file, 'rb') as f:
             items = pickle.load(f)
-        print(f"Items loaded from {filename}.")
+        #print(f"Items loaded from {filename}.")
         return items
     # 如果文件不存在则创建一个新文件
     else:
