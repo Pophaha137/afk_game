@@ -22,27 +22,27 @@ def print_img(surface, print_page, page=0):
     else:
         print_page = 0
 
-    x = 375  # 初始x坐标
-    y = 60  # 初始y坐标
+    x = 368  # 初始x坐标
+    y = 42  # 初始y坐标
     count = 0  # 当前行的物品数量
     for item in img_list:
         img = item.get_img()  # 获取物品图片
         surface.blit(img, (x, y))  # 将图片绘制到surface上
-        x += img.get_width() + 51  # 更新x坐标以便下一个图片不会覆盖当前图片
+        x += img.get_width() + 9  # 更新x坐标以便下一个图片不会覆盖当前图片
         count += 1  # 更新当前行的物品数量
         if count == items_per_row:  # 如果当前行的物品数量达到了6，就换行
-            x = 375  # 重置x坐标
-            y += img.get_height() + 56  # 更新y坐标以便下一个图片在新的一行
+            x = 368  # 重置x坐标
+            y += img.get_height() + 16  # 更新y坐标以便下一个图片在新的一行
             count = 0  # 重置当前行的物品数量
 
 
 def position_id(mx, my):
-    x = 100
-    y = 100
+    x = 375
+    y = 60
     count = 0
     for i in range(24):
         if x < mx < x + 50 and y < my < y + 50:
-            # print (i)
+            print (i)
             return i
         x += 50 + 10
         count += 1
@@ -50,7 +50,7 @@ def position_id(mx, my):
             x = 100
             y += 50 + 10
             count = 0
-    # print(-1)
+    print(-1)
     return -1
 
 
@@ -96,9 +96,11 @@ def backpack(surface):
                         print_page += 1
                         if print_page == 3:
                             print_page = 0
+                            page = 0
                     elif 1000 < mx < 1100 and 600 < my < 700:
                         if print_page != 0:
                             print_page -= 1
+                            page = 0
 
                     else:
                         generate_weapon(0, 10)
