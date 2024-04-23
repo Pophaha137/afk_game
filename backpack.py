@@ -24,21 +24,24 @@ def print_img(surface, print_page):
     x = 100  # 初始x坐标
     y = 100  # 初始y坐标
     count = 0  # 当前行的物品数量
-    for item in img_list:
-        img = item.get_img()  # 获取物品图片
-        surface.blit(img, (x, y))  # 将图片绘制到surface上
-        x += img.get_width() + 10  # 更新x坐标以便下一个图片不会覆盖当前图片
-        count += 1  # 更新当前行的物品数量
-        if count == items_per_row:  # 如果当前行的物品数量达到了6，就换行
-            x = 100  # 重置x坐标
-            y += img.get_height() + 10  # 更新y坐标以便下一个图片在新的一行
-            count = 0  # 重置当前行的物品数量
+    if img_list != []:
+        for item in img_list:
+            img = item.get_img()  # 获取物品图片
+            surface.blit(img, (x, y))  # 将图片绘制到surface上
+            x += img.get_width() + 10  # 更新x坐标以便下一个图片不会覆盖当前图片
+            count += 1  # 更新当前行的物品数量
+            if count == items_per_row:  # 如果当前行的物品数量达到了6，就换行
+                x = 100  # 重置x坐标
+                y += img.get_height() + 10  # 更新y坐标以便下一个图片在新的一行
+                count = 0  # 重置当前行的物品数量
 
 def position_id(mx, my):
     x = 100
     y = 100
     count = 0
     for i in range(24):
+        if i >= len(weapons):
+            break
         img = weapons[i].get_img()
         if x <= mx <= x + img.get_width() and y <= my <= y + img.get_height():
             print (i)

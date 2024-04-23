@@ -68,9 +68,9 @@ def load_items_from_file(filename):
     # 如果文件不存在则创建一个新文件
     else:
         print(f"File {filename} does not exist. Creating a new file.")
-        with open(filename, 'wb') as f:
+        with open(file, 'wb') as f:
             pickle.dump(items, f)
-        print(f"New file {filename} created.")
+        print(f"New file {file} created.")
         return items
 
 
@@ -359,12 +359,12 @@ armor_hash =    load_items_from_file("armor_hash.pkl")
 jewelrys =      load_items_from_file("jewelrys.pkl")
 jewelry_hash =  load_items_from_file("jewelry_hash.pkl")
 
-
+"""
 generate_weapon(0, 10)
 generate_weapon(0, 10)
 generate_weapon(0, 10)
 generate_weapon(0, 10)
-
+"""
 
 print("weapons:\n")
 print_weapons()
