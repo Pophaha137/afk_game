@@ -5,7 +5,7 @@ from function import *
 def SecondFloor(surface):
     global state
     from backpack import backpack
-    #from itembox import itembox
+    from itembox import chest
     from Ffloor import FirstFloor
     state = "Sfloor"
     #screen size
@@ -20,7 +20,7 @@ def SecondFloor(surface):
 
     #button
     head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
-    box = TButton(500, 0, " ", boxi, boxi, None, None,font, (0,0,0))
+    box = TButton(500, 0, " ", boxi, boxi, None, chest, font, (0,0,0))
     stairs = TButton(w-150, 0, " ", stairsi, stairsi, None, FirstFloor,font, (0,0,0))
 
     running = True
