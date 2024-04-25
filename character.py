@@ -680,6 +680,7 @@ def save_player():
     with open('data/player.pkl', 'wb') as output:
         pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
 
+
 check_player()
 player = load_player()
 

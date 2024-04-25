@@ -364,6 +364,63 @@ def item_reduce(i, number):
     item_list = load_items_from_file("item_list.pkl")
 
 
+def item_drop(luck):
+    drop_chances = {
+        "gold_ore_1": 0.20,
+        "gold_ore_2": 0.10,
+        "gold_ore_3": 0.05,
+        "mythril_ore_1": 0.20,
+        "mythril_ore_2": 0.10,
+        "mythril_ore_3": 0.05
+    }
+
+    dropped_items = {}
+    for item_name, base_chance in drop_chances.items():
+        # Adjusting the chance based on luck, more naturally influencing the result
+        modified_chance = min(1, base_chance + (luck / 1000))  # Ensuring it does not exceed 100%
+        number_of_drops = random.randint(1, max(1, int(luck * modified_chance)))  # Influencing the number of drops based on luck and chance
+
+        if random.random() < modified_chance:  # Checking if an item drops
+            dropped_items[item_name] = number_of_drops  # Assigning the number of dropped items
+
+    return dropped_items
+
+
+def count_drops(dropped_items):
+    counts = {}
+    for item in dropped_items:
+        if item in counts:
+            counts[item] += 1
+        else:
+            counts[item] = 1
+    return counts
+
+
+
+def item_name_to_index(name):
+    # Assuming item_name is a global list containing names
+    if name in item_name:
+        return item_name.index(name)
+    return -1  # Return -1 if the item name is not found
+
+def update_chest(dropped_items):
+    for item_name, count in dropped_items.items():
+        item_index = item_name_to_index(item_name)
+        if item_index != -1:  # Ensure the index is valid
+            item_add(item_index, count)
+        else:
+            print(f"Item name {item_name} not found in item list.")
+
+
+
+
+item_list = generate_item()
+
+drops = item_drop(50)
+print(drops)
+update_chest(drops)
+
+print_item_list()
 """
 #武器测试
 
@@ -396,7 +453,6 @@ armors = load_items_from_file("armors.pkl")
 armor_hash = load_items_from_file("armor_hash.pkl")
 jewelrys = load_items_from_file("jewelrys.pkl")
 jewelry_hash = load_items_from_file("jewelry_hash.pkl")
-item_list = generate_item()
 
 """
 generate_weapon(0, 10)
@@ -474,8 +530,6 @@ while running:
 
 
 """
-
-print_item_list()
 
 save_items_to_file("weapons.pkl", weapons)
 save_items_to_file("weapon_hash.pkl", weapon_hash)
