@@ -129,7 +129,7 @@ class Items:
     
     def get_img(self):
         img = pygame.image.load(f"./resource/item/{self.name}.png")
-        img = pygame.transform.scale(img, (89, 91))
+        img = pygame.transform.scale(img, (90, 107))
         return img
     
     def to_dict(self):
@@ -149,3 +149,6 @@ class Items:
         
     def __str__(self):
         return f"{self.name} - {self.number}"
+    
+    def show_number(self):
+        return self.number

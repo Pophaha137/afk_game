@@ -3,6 +3,7 @@ import json
 from Textbutton import TButton
 from function import *
 from equipment import *
+from class_define import *
 
 
 def print_img(surface, print_page, page=0):
@@ -15,36 +16,50 @@ def print_img(surface, print_page, page=0):
     img_list = items[start_index:end_index]
 
     x = 368  # 初始x坐标
-    y = 42  # 初始y坐标
+    y = 38  # 初始y坐标
     count = 0  # 当前行的物品数量
     for item in img_list:
         img = item.get_img()  # 获取物品图片
         surface.blit(img, (x, y))  # 将图片绘制到surface上
-        x += img.get_width() + 9  # 更新x坐标以便下一个图片不会覆盖当前图片
+        x += img.get_width() + 8  # 更新x坐标以便下一个图片不会覆盖当前图片
         count += 1  # 更新当前行的物品数量
         if count == items_per_row:  # 如果当前行的物品数量达到了6，就换行
             x = 368  # 重置x坐标
-            y += img.get_height() + 16  # 更新y坐标以便下一个图片在新的一行
+            y += img.get_height()   # 更新y坐标以便下一个图片在新的一行
             count = 0  # 重置当前行的物品数量
 
 
 def position_id(mx, my):
     x = 368
-    y = 42
+    y = 38
     count = 0
     for i in range(30):
-        if x < mx < x + 89 and y < my < y + 91:
-            # print (i)
+        if x < mx < x + 98 and y < my < y + 107:
+            #print (i)
             return i
-        x += 89 + 9
+        x += 98
         count += 1
         if count == 6:
             x = 368
-            y += 91 + 16
+            y += 107
             count = 0
     # print(-1)
     return -1
 
+def print_num(surface):
+    for i in range(30):
+        x = 430
+        y = 120
+        count = 0
+        item = load_items_from_file("item_list.pkl")
+        for i in item:
+            print_text(surface, str(i.show_number()) , x, y, 25, (255,255,255))
+            x += 100
+            count += 1
+            if count == 6:
+                x = 368
+                y += 107
+                count = 0
 
 def print_text(surface, text, x, y, font_size, color):
     font = pygame.font.Font(None, font_size)
@@ -54,7 +69,7 @@ def print_text(surface, text, x, y, font_size, color):
     surface.blit(text_surface, text_rect)
 
 
-def print_title(surface, print_page):
+def print_title(surface):
     x = 45
     y = 100
     size = 40
@@ -67,7 +82,7 @@ def print_info(surface, page, position_id):
     y = 150
     if position_id != -1:
         i = position_id + page * 30
-        items = load_items_from_file("items.pkl")
+        items = load_items_from_file("item_list.pkl")
         if i < len(items):
             item = items[i]
             text_dict = item.to_dict()
@@ -144,10 +159,11 @@ def chest(surface):
 
         esc.draw(screen)
         print_img(screen, print_page, page)
-        print_title(screen, print_page)
+        print_title(screen)
         print_info(screen, page, position_id(mx, my))
+        print_num(screen)
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(120)
 
 
 pygame.init()
