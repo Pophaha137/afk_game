@@ -118,3 +118,34 @@ class Jewelry:
             "Defense": f"{self.defense}"
         }
     
+
+
+class Items:
+    def __init__(self, id, name, number = 0):
+        self.name = name
+        self.id = id
+        self.number = number
+        self.img = self.get_img()
+    
+    def get_img(self):
+        img = pygame.image.load(f"./resource/item/{self.name}.png")
+        img = pygame.transform.scale(img, (89, 91))
+        return img
+    
+    def to_dict(self):
+        return {
+            "Name": f"{self.name}",
+            "Number": f"{self.number}"
+        }
+    
+    def add_item(self, number):
+        self.number += number
+
+    def reduce_item(self, number):
+        if self.number >= number:
+            self.number -= number
+        else:
+            return False
+        
+    def __str__(self):
+        return f"{self.name} - {self.number}"
