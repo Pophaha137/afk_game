@@ -122,7 +122,8 @@ def backpack(surface):
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"), (50, 50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"), (50, 50))
     pakage = pygame.transform.scale(pygame.image.load("./resource/character/inventory.png"), (1080, 600))
-
+    left_page = pygame.transform.scale(pygame.image.load("./resource/background/button/left.png"), (100,100))
+    right_page = pygame.transform.scale(pygame.image.load("./resource/background/button/right.png"), (100, 100))
     # 背包物品展示
     select_position_id = -1  # 选中的物品的索引
     print_page = 0  # 当前选择页数
@@ -164,10 +165,21 @@ def backpack(surface):
                         generate_weapon(0, 10)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(500, 600, 100, 100), 2)
-        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(600, 600, 100, 100), 2)
-        pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(900, 600, 100, 100), 2)
-        pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(1000, 600, 100, 100), 2)
+
+        red_rect = pygame.Rect(500, 600, 100, 100)
+        green_rect = pygame.Rect(600, 600, 100, 100)
+        blue_rect = pygame.Rect(900, 600, 100, 100)
+        magenta_rect = pygame.Rect(1000, 600, 100, 100)
+
+
+
+        pygame.draw.rect(screen, (255, 0, 0), red_rect, 2)
+        pygame.draw.rect(screen, (0, 255, 0), green_rect, 2)
+        pygame.draw.rect(screen, (0, 0, 255), blue_rect, 2)
+        pygame.draw.rect(screen, (255, 0, 255), magenta_rect, 2)
+
+        screen.blit(left_page, red_rect.topleft)
+        screen.blit(right_page, green_rect.topleft)
 
         surface.blit(pakage, (0, 0))
 
