@@ -1,8 +1,147 @@
 import pygame
 from Textbutton import TButton
 from function import *
+from forge import *
+
+def get_position_id(mx, my):
+    x = 807
+    y = 16
+    count = 0
+    for i in range(24):
+        if x < mx < x + 60 and y < my < y + 60:
+            print (i)
+            return i
+        x += 100
+        count += 1
+        if count == 4:
+            x = 807
+            y += 100
+            count = 0
+    print(-1)
+    return -1
+
+def print_text(surface, text, x, y, font_size, color):
+    font = pygame.font.Font(None, font_size)
+    text_surface = font.render(text, True, color)
+    surface.blit(text_surface, (x, y))
+
+def color_of_text(item_id):
+    if item_list[item_id].number < 3:
+        return (255, 0, 0)
+    else:
+        return (255,255,255)
+
+def print_metarial(selected_id, page = 0):
+    if selected_id != None:
+        selected_id += page * 24
+        xy1 = (50,520)
+        xy2 = (260,520)
+        xy3 = (500,520)
+        x4 = 60
+        y4 = 600
+        x5 = 270
+        y5 = 600
+        font_size = 20
+        if 0 <= selected_id < 4 :
+            screen.blit(item_img[0],xy1)
+            screen.blit(item_img[3],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[0].number) + "/3", x4, y4, font_size, color_of_text(0))
+            print_text(screen, str(item_list[3].number) + "/3", x5, y5, font_size, color_of_text(3))
+        elif 4 <= selected_id < 8:
+            screen.blit(item_img[1],xy1)
+            screen.blit(item_img[4],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[1].number) + "/3", x4, y4, font_size, color_of_text(1))
+            print_text(screen, str(item_list[4].number) + "/3", x5, y5, font_size, color_of_text(4))
+        elif 8 <= selected_id < 10:
+            screen.blit(item_img[2],xy1)
+            screen.blit(item_img[5],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[2].number) + "/3", x4, y4, font_size, color_of_text(2))
+            print_text(screen, str(item_list[5].number) + "/3", x5, y5, font_size, color_of_text(5))
+        elif 10 <= selected_id < 14 :
+            screen.blit(item_img[0],xy1)
+            screen.blit(item_img[3],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[0].number) + "/3", x4, y4, font_size, color_of_text(0))
+            print_text(screen, str(item_list[3].number) + "/3", x5, y5, font_size, color_of_text(3))
+        elif 14 <= selected_id < 18:
+            screen.blit(item_img[1],xy1)
+            screen.blit(item_img[4],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[1].number) + "/3", x4, y4, font_size, color_of_text(1))
+            print_text(screen, str(item_list[4].number) + "/3", x5, y5, font_size, color_of_text(4))
+        elif 18 <= selected_id < 20:
+            screen.blit(item_img[2],xy1)
+            screen.blit(item_img[5],xy2)
+            screen.blit(forge_img[selected_id],xy3)
+            print_text(screen, str(item_list[2].number) + "/3", x4, y4, font_size, color_of_text(2))
+            print_text(screen, str(item_list[5].number) + "/3", x5, y5, font_size, color_of_text(5))
+
+
+
+        
+def get_real_position(position_id, page=0):
+    position_id += page * 24
+    weapon_len = len(sword_name)
+    armor_len = len (armor_name)
+    
+
+    if  0 <= position_id < weapon_len:
+        print_text(screen, "Sword Name:  " + str(sword_name[position_id]), 650, 615, 20, (0, 0, 0))
+        print_text(screen, "Base Damage: " + str(sword_base_damage[position_id]), 650, 635, 20, (0, 0, 0))
+        print_text(screen, "Attribute:   " + str(sword_attribute[position_id]), 650, 655, 20, (0, 0, 0))
+        print_text(screen, "Pecentage:   " + str(sword_critical_damage_percentage[position_id]), 650, 675, 20, (0, 0, 0))
+        
+
+
+    elif weapon_len <=  position_id < weapon_len + armor_len:
+        print_text(screen, "Armor Name:   " + str(armor_name[position_id - weapon_len]), 650, 615, 20, (0, 0, 0))
+        print_text(screen, "Base Defense: " + str(armor_base_defense[position_id - weapon_len]), 650, 635, 20, (0, 0, 0))
+        print_text(screen, "Attribute:    " + str(armor_attribute[position_id - weapon_len]), 650, 655, 20, (0, 0, 0))
+        
+
+def get_selected_id(mx, my, selected_id):
+    x = 807
+    y = 16
+    count = 0
+    for i in range(24):
+        if x < mx < x + 60 and y < my < y + 60:
+            print (i)
+            return i
+        x += 100
+        count += 1
+        if count == 4:
+            x = 807
+            y += 100
+            count = 0
+    else:
+        return selected_id
+
+
+def print_img(surface, page=0):
+    items_per_page = 24  # 每页的物品数量
+    items_per_row = 4  # 每行的物品数量
+    start_index = items_per_page * page  # 开始的索引
+    end_index = start_index + items_per_page  # 结束的索引
+    x = 807  # 初始x坐标
+    y = 16  # 初始y坐标
+    count = 0  # 当前行的物品数量
+    for img in forge_img:
+        surface.blit(img, (x, y))  # 将图片绘制到surface上
+        x += 100  # 更新x坐标以便下一个图片不会覆盖当前图片
+        count += 1  # 更新当前行的物品数量
+        if count == items_per_row:  # 如果当前行的物品数量达到了6，就换行
+            x = 807  # 重置x坐标
+            y += 100  # 更新y坐标以便下一个图片在新的一行
+            count = 0  # 重置当前行的物品数量
+
+
 
 def smithy(surface):
+    page = 0
+    selected_id = -1
     from Ffloor import FirstFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     #image import
@@ -34,27 +173,36 @@ def smithy(surface):
                 terminate()
             elif event.type == pygame.MOUSEMOTION:
                 esc.getFocus(mx,my)
+                selected_id = selected_id
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     esc.mouseDown(mx,my)
+                    selected_id = get_selected_id(mx, my, selected_id)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx,my)
             surface.blit(smithy,(-400,-200))
             surface.blit(equip_background,(600,-200))
             surface.blit(reforging_background,(0,400))
-            surface.blit(first_item_display,(30,600))
-            surface.blit(second_item_display, (240, 600))
-            surface.blit(result_display,(480,600))
-            surface.blit(add_button,(150,615))
-            surface.blit(equal_button,(380,615))
+            surface.blit(first_item_display,(30,500))
+            surface.blit(second_item_display, (240, 500))
+            surface.blit(result_display,(480,500))
+            surface.blit(add_button,(150,515))
+            surface.blit(equal_button,(380,515))
             surface.blit(forge, (150, 100))
-
+            
             for row in range(rows):
                 for column in range(columns):
                     slot_x = start_x + column * (slot_width + slot_margin)
                     slot_y = start_y + row * (slot_height + slot_margin)
                     surface.blit(item_slot, (slot_x, slot_y))
+            #可打造装备图
+            print_img(surface, page)
+            #展示数据
+            potision_id = get_position_id(mx, my)
+            get_real_position(potision_id, page)
+            print_metarial(selected_id, page)
             esc.draw(screen)
+            pygame.draw.rect(surface, (170,121,89), pygame.Rect(600, 585, 680,20))
         pygame.display.flip()
 
 
