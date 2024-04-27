@@ -5,6 +5,8 @@ from function import *
 from equipment import *
 
 
+
+
 def print_img(surface, print_page, page=0):
     items_per_page = 30  # 每页的物品数量
     items_per_row = 6  # 每行的物品数量
@@ -75,11 +77,43 @@ def print_title(surface, print_page):
         print_text(surface, "Jewelry", x, y, size, (0, 0, 0))
 
 
-def print_info(surface, print_page, page, position_id):
+def print_info(surface, print_page, page, position_id, selected_id):
     size = 26
     x = 45
     y = 150
-    if position_id != -1:
+    if selected_id != -1:
+        if print_page == 0:
+            weapons = load_items_from_file("weapons.pkl")
+            if selected_id < len(weapons):
+                item = weapons[selected_id]
+                text_dict = item.to_dict()
+
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20
+        elif print_page == 1:
+            armors = load_items_from_file("armors.pkl")
+            if selected_id < len(armors):
+                item = armors[selected_id]
+                text_dict = item.to_dict()
+
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20
+        elif print_page == 2:
+            jewelrys = load_items_from_file("jewelrys.pkl")
+            if selected_id < len(jewelrys):
+                item = jewelrys[selected_id]
+                text_dict = item.to_dict()
+
+                for key, value in text_dict.items():
+                    text = f"{key}: {value}"
+                    print_text(surface, text, x, y, size, (0, 0, 0))
+                    y += 20
+
+    elif position_id != -1 and selected_id == -1:
         i = position_id + page * 30
         if print_page == 0:
             weapons = load_items_from_file("weapons.pkl")
@@ -112,9 +146,70 @@ def print_info(surface, print_page, page, position_id):
                     print_text(surface, text, x, y, size, (0, 0, 0))
                     y += 20  # 更新y坐标以便下一个文本在新的一行
 
+def get_selected_id(mx, my, selected_id):
+    global current_page, print_page
+    x = 368
+    y = 42
+    count = 0
+    if print_page == 0:
+        weapons = load_items_from_file("weapons.pkl")
+        for i in range(30):
+            if x < mx < x + 89 and y < my < y + 91:
+                if i + current_page * 30 == selected_id or i + current_page * 30 >= len(weapons):
+                    return -1
+                return i + current_page * 30
+            x += 89 + 9
+            count += 1
+            if count == 6:
+                x = 368
+                y += 91 + 16
+                count = 0
+        return selected_id
+    elif print_page == 1:
+        armors = load_items_from_file("armors.pkl")
+        for i in range(30):
+            if x < mx < x + 89 and y < my < y + 91:
+                if i + current_page * 30 == selected_id or i + current_page * 30 >= len(armors):
+                    return -1
+                return i + current_page * 30
+            x += 89 + 9
+            count += 1
+            if count == 6:
+                x = 368
+                y += 91 + 16
+                count = 0
+        return selected_id
+    elif print_page == 2:
+        jewelrys = load_items_from_file("jewelrys.pkl")
+        for i in range(30):
+            if x < mx < x + 89 and y < my < y + 91:
+                if i + current_page * 30 == selected_id or i + current_page * 30 >= len(jewelrys):
+                    return -1
+                return i + current_page * 30
+            x += 89 + 9
+            count += 1
+            if count == 6:
+                x = 368
+                y += 91 + 16
+                count = 0
+        return selected_id
 
-current_page = 0
-print_page = 0
+def highlight_selected_item(surface, mx, my, selected_id, current_page):
+    x = 368
+    y = 42
+    if selected_id == -1:
+        return
+    s_id = selected_id % 30
+    c_page = selected_id // 30
+    row = s_id // 6
+    col = s_id % 6
+    x += col * 98
+    y += row * 107
+    if c_page != current_page:
+        return
+    else:
+        pygame.draw.rect(surface, (255,255,255), (x, y, 89, 91), 2)
+
 
 
 def page_change_click(self):
@@ -134,14 +229,43 @@ def page_change_box(self):
     if print_page != 0:
         pass
 
+def delete_equipment(mx, my, selected_id):
+    global print_page
+    global current_page
+    
+    
+    if selected_id == -1:
+        return
+    if print_page == 0:
+        weapons = load_items_from_file("weapons.pkl")
+        if len(weapons) > 0:
+            delete_weapon(get_selected_id(mx, my, selected_id))
+            print("weapon deleted")
+    elif print_page == 1:
+        armors = load_items_from_file("armors.pkl")
+        if len(armors) > 0:
+            delete_armor(get_selected_id(mx, my, selected_id))
+    elif print_page == 2:
+        jewelrys = load_items_from_file("jewelrys.pkl")
+        if len(jewelrys) > 0:
+            delete_jewelry(get_selected_id(mx, my, selected_id))
 
-def delete_equipment(self):
-    print("Deleting equipment...")
+def delete_func(self):
+    global mx, my, selected_id
+    delete_equipment(mx, my, selected_id)
+    selected_id = -1
+    
+current_page = 0
+print_page = 0
+mx, my = 0, 0
+selected_id = -1
 
 
 def backpack(surface):
     global current_page
-    mx, my = 0, 0
+    global print_page
+    global mx, my
+    global selected_id
     # page = 0
     from Ffloor import FirstFloor
     # 时钟
@@ -159,14 +283,13 @@ def backpack(surface):
     deleteN = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteN.png"), (200, 50))
     deleteD = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteD.png"), (200, 50))
     # 背包物品展示
-    select_position_id = -1  # 选中的物品的索引
     print_page = 0  # 前选择页数当
 
     # button
     esc = TButton(1230, 0, " ", crossN, crossN, crossD, FirstFloor, font, (0, 0, 0))
     left = TButton(500, 600, " ", left_page, left_page, leftD_page, page_change_click, font, (0, 0, 0))
     right = TButton(600, 600, " ", right_page, right_page, rightD_page, page_change_plus, font, (0, 0, 0))
-    delete = TButton(80, 450, "Delete", deleteN, deleteN, deleteD, delete_equipment, page_font, (0, 0, 0))
+    delete = TButton(80, 450, "Delete", deleteN, deleteN, deleteD, delete_func, page_font, (0, 0, 0))
     running = True
 
     # event
@@ -190,18 +313,23 @@ def backpack(surface):
                     right.mouseDown(mx, my)
                     delete.mouseDown(mx, my)
                     if 900 < mx < 1000 and 600 < my < 700:
-                        if print_page != 0:
-                            print_page -= 1
-                            page = 0
+                        print_page -= 1
+                        current_page = 0 
+                        selected_id = -1
+                        if print_page == -1:
+                            print_page = 2
+                            
 
                     elif 1000 < mx < 1100 and 600 < my < 700:
                         print_page += 1
+                        current_page = 0
+                        selected_id = -1
                         if print_page == 3:
                             print_page = 0
-                            page = 0
+                            
 
                     else:
-                        generate_weapon(0, 10)
+                        selected_id = get_selected_id(mx, my, selected_id)
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
@@ -232,7 +360,8 @@ def backpack(surface):
         delete.draw(screen)
         print_img(screen, print_page, current_page)
         print_title(screen, print_page)
-        print_info(screen, print_page, current_page, position_id(mx, my))
+        print_info(screen, print_page, current_page, position_id(mx, my), selected_id)
+        highlight_selected_item(screen, mx, my, selected_id, current_page)
         pygame.display.flip()
         clock.tick(60)
 
