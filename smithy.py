@@ -2,6 +2,10 @@ import pygame
 from Textbutton import TButton
 from function import *
 from forge import *
+from equipment import *
+
+page = 0
+selected_id = -1
 
 def get_position_id(mx, my):
     x = 807
@@ -26,12 +30,15 @@ def print_text(surface, text, x, y, font_size, color):
     surface.blit(text_surface, (x, y))
 
 def color_of_text(item_id):
+    item_list = load_items_from_file("item_list.pkl")
     if item_list[item_id].number < 3:
         return (255, 0, 0)
     else:
         return (255,255,255)
 
-def print_metarial(selected_id, page = 0):
+def print_metarial(page = 0):
+    global selected_id
+    item_list = load_items_from_file("item_list.pkl")
     if selected_id != None:
         selected_id += page * 24
         xy1 = (50,520)
@@ -80,7 +87,66 @@ def print_metarial(selected_id, page = 0):
             print_text(screen, str(item_list[5].number) + "/3", x5, y5, font_size, color_of_text(5))
 
 
-
+def generate_item(luck, page = 0 ):
+    global selected_id
+    item_list = load_items_from_file("item_list.pkl")
+    if selected_id == None or selected_id == -1:
+        return
+    sid = selected_id + page * 24
+    if sid < 0 or sid >= len(forge_img):
+        return
+    weapon_len = len(sword_name)
+    armor_len = len(armor_name)
+    if 0 <= sid < weapon_len:
+        if sid < 4:
+            if item_list[0].number >= 3 and item_list[3].number >= 3:
+                item_list[0].number -= 3
+                item_list[3].number -= 3
+                weapons = load_items_from_file("weapons.pkl")
+                generate_weapon(sid, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
+        elif 4<= sid < 8:
+            if item_list[1].number >= 3 and item_list[4].number >= 3:
+                item_list[1].number -= 3
+                item_list[4].number -= 3
+                weapons = load_items_from_file("weapons.pkl")
+                generate_weapon(sid, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
+        elif 8 <= sid < 10:
+            if item_list[2].number >= 3 and item_list[5].number >= 3:
+                item_list[2].number -= 3
+                item_list[5].number -= 3
+                weapons = load_items_from_file("weapons.pkl")
+                generate_weapon(sid, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
+    elif weapon_len <= sid < weapon_len + armor_len:
+        if 10 <= sid < 14:
+            if item_list[0].number >= 3 and item_list[3].number >= 3:
+                item_list[0].number -= 3
+                item_list[3].number -= 3
+                armors = load_items_from_file("armors.pkl")
+                generate_armor(sid - weapon_len, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
+        elif 14 <= sid < 18:
+            if item_list[1].number >= 3 and item_list[4].number >= 3:
+                item_list[1].number -= 3
+                item_list[4].number -= 3
+                armors = load_items_from_file("armors.pkl")
+                generate_armor(sid - weapon_len, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
+        elif 18 <= sid < 20:
+            if item_list[2].number >= 3 and item_list[5].number >= 3:
+                item_list[2].number -= 3
+                item_list[5].number -= 3
+                armors = load_items_from_file("armors.pkl")
+                generate_armor(sid - weapon_len, luck)
+                save_items_to_file("item_list.pkl", item_list)
+                item_list = load_items_from_file("item_list.pkl")
         
 def get_real_position(position_id, page=0):
     position_id += page * 24
@@ -102,22 +168,24 @@ def get_real_position(position_id, page=0):
         print_text(screen, "Attribute:    " + str(armor_attribute[position_id - weapon_len]), 650, 655, 20, (0, 0, 0))
         
 
-def get_selected_id(mx, my, selected_id):
+def get_selected_id(mx, my, page=0):
+    global selected_id
     x = 807
     y = 16
     count = 0
     for i in range(24):
         if x < mx < x + 60 and y < my < y + 60:
             print (i)
-            return i
+            if i + page * 24 == selected_id:
+                selected_id = -1
+            else:
+                selected_id = i + page * 24
         x += 100
         count += 1
         if count == 4:
             x = 807
             y += 100
             count = 0
-    else:
-        return selected_id
 
 
 def print_img(surface, page=0):
@@ -138,11 +206,10 @@ def print_img(surface, page=0):
             count = 0  # 重置当前行的物品数量
 
 def generate_equipment(self):
-    print("Generating equipment...")
+    generate_item(0, page)
 
 def smithy(surface):
-    page = 0
-    selected_id = -1
+
     from Ffloor import FirstFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
     small_font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 24)
@@ -179,12 +246,11 @@ def smithy(surface):
             elif event.type == pygame.MOUSEMOTION:
                 esc.getFocus(mx,my)
                 generate.getFocus(mx,my)
-                selected_id = selected_id
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     esc.mouseDown(mx,my)
                     generate.mouseDown(mx,my)
-                    selected_id = get_selected_id(mx, my, selected_id)
+                    get_selected_id(mx, my)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx,my)
                 generate.mouseUp(mx,my)
@@ -208,7 +274,7 @@ def smithy(surface):
             #展示数据
             potision_id = get_position_id(mx, my)
             get_real_position(potision_id, page)
-            print_metarial(selected_id, page)
+            print_metarial(page)
             generate.draw(screen)
             esc.draw(screen)
             pygame.draw.rect(surface, (170,121,89), pygame.Rect(600, 585, 680,20))
