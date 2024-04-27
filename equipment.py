@@ -151,8 +151,8 @@ def w_id_to_position_id(id):
 
 
 # 防具类
-armor_name = ["God_armor", "God_helmet", "God_gloves", "God_boots", "God_ring", "God_necklace", "God_belt", "God_cloak",
-              "God_bracelet", "God_earring"]
+armor_name = ["light_cloak", "dark_cloak", "light_robe", "dark_robe", "light_armor", "dark_armor", "fire_cloak", "fire_robe",
+              "poison_chest", "poison_armor"]
 armor_base_defense = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
 armor_attribute = ["light", "dark", "light", "dark", "light", "dark", "light", "dark", "light", "dark"]
 
