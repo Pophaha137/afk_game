@@ -109,10 +109,24 @@ def print_info(surface, print_page, page, position_id):
                     text = f"{key}: {value}"
                     print_text(surface, text, x, y, size, (0, 0, 0))
                     y += 20  # 更新y坐标以便下一个文本在新的一行
-
+current_page = 0
+print_page = 0
+def page_change_click(self):
+    global current_page
+    if current_page >= 1 :
+        current_page = current_page - 1
+def page_change_plus(self):
+    global current_page
+    if current_page <= 18 :
+        current_page = current_page+ 1
+def page_change_box(self):
+    global print_page
+    if print_page !=0:
+        pass
 def backpack(surface):
+    global current_page
     mx, my = 0, 0
-    page = 0
+    #page = 0
     from Ffloor import FirstFloor
     # 时钟
     clock = pygame.time.Clock()
@@ -124,14 +138,21 @@ def backpack(surface):
     pakage = pygame.transform.scale(pygame.image.load("./resource/character/inventory.png"), (1080, 600))
     left_page = pygame.transform.scale(pygame.image.load("./resource/background/button/left.png"), (100,100))
     right_page = pygame.transform.scale(pygame.image.load("./resource/background/button/right.png"), (100, 100))
+    leftD_page = pygame.transform.scale(pygame.image.load("./resource/background/button/leftD.png"), (100,100))
+    rightD_page = pygame.transform.scale(pygame.image.load("./resource/background/button/rightD.png"), (100,100))
     # 背包物品展示
     select_position_id = -1  # 选中的物品的索引
-    print_page = 0  # 当前选择页数
+    print_page = 0  # 前选择页数当
 
     # button
     esc = TButton(1230, 0, " ", crossN, crossN, crossD, FirstFloor, font, (0, 0, 0))
+    left = TButton(500, 600, " ", left_page,left_page,leftD_page,page_change_click,font,(0,0,0))
+    right = TButton(600, 600, " ", right_page,right_page,rightD_page,page_change_plus,font,(0,0,0))
     running = True
 
+    #event
+    EVENT1 = pygame.USEREVENT
+    pygame.time.set_timer(EVENT1, 1000)
     while running:
         for event in pygame.event.get():
             mx, my = pygame.mouse.get_pos()
@@ -140,17 +161,14 @@ def backpack(surface):
                 terminate()
             elif event.type == pygame.MOUSEMOTION:
                 esc.getFocus(mx, my)
+                left.getFocus(mx, my)
+                right.getFocus(mx, my)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     esc.mouseDown(mx, my)
-                    if 500 < mx < 600 and 600 < my < 700:
-                        if page >= 1:
-                            page -= 1
-
-                    elif 600 < mx < 700 and 600 < my < 700:
-                        if page <= 18:
-                            page += 1
-                    elif 900 < mx < 1000 and 600 < my < 700:
+                    left.mouseDown(mx, my)
+                    right.mouseDown(mx, my)
+                    if 900 < mx < 1000 and 600 < my < 700:
                         if print_page != 0:
                             print_page -= 1
                             page = 0
@@ -160,11 +178,16 @@ def backpack(surface):
                         if print_page == 3:
                             print_page = 0
                             page = 0
-
+                    
                     else:
                         generate_weapon(0, 10)
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
+                left.mouseUp(mx, my)
+                right.mouseUp(mx, my)
+            elif event.type == EVENT1:
+                pygame.display.update()
 
         red_rect = pygame.Rect(500, 600, 100, 100)
         green_rect = pygame.Rect(600, 600, 100, 100)
@@ -178,21 +201,22 @@ def backpack(surface):
         pygame.draw.rect(screen, (0, 0, 255), blue_rect, 2)
         pygame.draw.rect(screen, (255, 0, 255), magenta_rect, 2)
 
-        screen.blit(left_page, red_rect.topleft)
-        screen.blit(right_page, green_rect.topleft)
+
 
         surface.blit(pakage, (0, 0))
 
         rect_x, rect_y, rect_width, rect_height = 350, 600, 100, 50
         pygame.draw.rect(surface, (196, 164, 132), [rect_x, rect_y, rect_width, rect_height])
-        page_num_text = page_font.render(f'Page {page}', True, (255, 255, 255))
+        page_num_text = page_font.render(f'Page {current_page}', True, (255, 255, 255))
         text_rect = page_num_text.get_rect(center=(rect_x + rect_width / 2, rect_y + rect_height / 2))
         surface.blit(page_num_text, text_rect)
 
         esc.draw(screen)
-        print_img(screen, print_page, page)
+        left.draw(screen)
+        right.draw(screen)
+        print_img(screen, print_page, current_page)
         print_title(screen, print_page)
-        print_info(screen, print_page, page, position_id(mx, my))
+        print_info(screen, print_page, current_page, position_id(mx, my))
         pygame.display.flip()
         clock.tick(60)
 
