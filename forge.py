@@ -8,12 +8,12 @@ def forge_img_generate():
         img = pygame.image.load("resource/weapon/" + str(i) + ".png")
         img = pygame.transform.scale(img, (44, 48))
         forge_img.append(img)
-        """
+
     for i in armor_name:
         img = pygame.image.load("resource/armor/" + str(i) + ".png")
         img = pygame.transform.scale(img, (44, 48))
         forge_img.append(img)
-        """
+
 
 
 item_img = []
