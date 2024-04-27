@@ -137,16 +137,20 @@ def print_img(surface, page=0):
             y += 100  # 更新y坐标以便下一个图片在新的一行
             count = 0  # 重置当前行的物品数量
 
-
+def generate_equipment(self):
+    print("Generating equipment...")
 
 def smithy(surface):
     page = 0
     selected_id = -1
     from Ffloor import FirstFloor
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
+    small_font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 24)
     #image import
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"),(50,50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"),(50,50))
+    generateN = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteN.png"), (200, 50))
+    generateD = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteD.png"), (200, 50))
     smithy = pygame.transform.scale(pygame.image.load("./resource/background/equip_background.png"),(1500,1000))
     equip_background = pygame.transform.scale(pygame.image.load("./resource/background/equip_background.png"),(1000,1400))
     reforging_background = pygame.transform.scale(pygame.image.load("./resource/background/button/block.png"),(600,600))
@@ -165,6 +169,7 @@ def smithy(surface):
 
     #button
     esc = TButton(1230,0, " ", crossN, crossN,crossD,FirstFloor, font,(0,0,0))
+    generate = TButton(180,650, "Generate", generateN, generateN, generateD, generate_equipment, small_font, (0,0,0))
     running = True
     while running:
         for event in pygame.event.get():
@@ -173,13 +178,16 @@ def smithy(surface):
                 terminate()
             elif event.type == pygame.MOUSEMOTION:
                 esc.getFocus(mx,my)
+                generate.getFocus(mx,my)
                 selected_id = selected_id
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     esc.mouseDown(mx,my)
+                    generate.mouseDown(mx,my)
                     selected_id = get_selected_id(mx, my, selected_id)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx,my)
+                generate.mouseUp(mx,my)
             surface.blit(smithy,(-400,-200))
             surface.blit(equip_background,(600,-200))
             surface.blit(reforging_background,(0,400))
@@ -201,6 +209,7 @@ def smithy(surface):
             potision_id = get_position_id(mx, my)
             get_real_position(potision_id, page)
             print_metarial(selected_id, page)
+            generate.draw(screen)
             esc.draw(screen)
             pygame.draw.rect(surface, (170,121,89), pygame.Rect(600, 585, 680,20))
         pygame.display.flip()
