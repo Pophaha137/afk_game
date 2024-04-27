@@ -1,9 +1,6 @@
 import random
-import os
-import pygame
 from class_define import *
 from equipment import *
-import pickle
 
 
 class character:
@@ -439,7 +436,6 @@ class character:
             print("Jewelry: None")
 
 
-# 怪物各项属性
 enemy_name = ["Goblin", "Skeleton", "Boar", "Light_Fairy", "Dark_Fairy"]
 enemy_hp_base = [15, 10, 20, 10, 10]
 enemy_hp_rate = [5, 3, 8, 4, 4]
@@ -454,19 +450,6 @@ enemy_speed_rate = [1, 1, 1, 2, 2]
 enemy_critical_damage_percentage = [1.2, 1.4, 1.0, 1.6, 1.6]
 enemy_attribute = [None, None, None, "light", "dark"]
 enemy_damage_type = ["physical", "physical", "physical", "magical", "magical"]
-
-# 怪物队列
-enemy = []
-
-
-# 生成敌人
-def generate_enemy(i, lv):
-    enemy.append(Enemy(i, lv))
-
-
-# 删除敌人
-def delete_enemy(i):
-    enemy.pop(i)
 
 
 class Enemy:
@@ -655,100 +638,15 @@ def fight(player, opponent):
 
 
 
-#测试部分
-# 保存player数据
+# 怪物队列
+enemy = []
 
 
-def load_player():
-    with open('data/player.pkl', 'rb') as input:
-        player = pickle.load(input)
-        return player
-
-def check_player():
-    # 确保data文件夹存在，否则创建
-    if not os.path.exists('data'):
-        os.makedirs('data')
-    # 确保player.pkl存在，否则创建
-    if not os.path.exists('data/player.pkl'):
-        with open('data/player.pkl', 'wb') as output:
-            player = character(1, 0, 100, 10, 10, 10, 10, 10, 0, 0)
-            pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
-    else:
-        player = load_player()
-
-def save_player():
-    with open('data/player.pkl', 'wb') as output:
-        pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
+# 生成敌人
+def generate_enemy(i, lv):
+    enemy.append(Enemy(i, lv))
 
 
-check_player()
-player = load_player()
-
-#武器测试
-generate_weapon(0, player.show_luck())
-print_weapons()
-print_weapon_hash()
-player.weapon_on(weapons[0])
-player.show()
-#player.weapon_off()
-#player.show()
-
-#防具测试
-generate_armor(0,player.show_luck())
-print_armors()
-print_armor_hash()
-player.armor_on(armors[0])
-player.show()
-#player.armor_off()
-#player.show()
-
-#珠宝测试
-generate_jewelry(0,player.show_luck())
-print_jewelrys()
-print_jewelry_hash()
-if len(jewelrys) != 0:
-    player.jewelry_on(jewelrys[0])
-player.show()
-#player.jewelry_off()
-#player.show()
-
-player.show()
-
-"""
-#删除测试
-delete_weapon(0)
-delete_armor(0)
-delete_jewelry(0)
-print("After delete:\n")
-print("Weapons:\n")
-print_weapons()
-print("Weapons Hash:\n")
-print_weapon_hash()
-print("Armors:")
-print_armors()
-print("Armors Hash:\n")
-print_armor_hash()
-print("Jewelrys:\n")
-print_jewelrys()
-print("Jewelrys Hash:\n")
-print_jewelry_hash()
-"""
-
-#plyaer.show()
-
-
-generate_enemy(0, 1)
-generate_enemy(1, 2)
-generate_enemy(2, 3)
-generate_enemy(3, 3)
-generate_enemy(4, 3)
-
-
-fight(player, enemy[0])
-fight(player, enemy[0])
-fight(player, enemy[0])
-fight(player, enemy[0])
-fight(player, enemy[0])
-
-player.show_all()
-save_player()
+# 删除敌人
+def delete_enemy(i):
+    enemy.pop(i)

@@ -1,12 +1,11 @@
 import pygame
-import sys
-import os
 from function import *
 from lib import *
 from backpack import *
 from equipment import *
 from Textbutton import TButton
 from Ffloor import FirstFloor
+from character_func import *
 #screen size
 w=1280
 h=800

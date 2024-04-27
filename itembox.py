@@ -1,5 +1,4 @@
 import pygame
-import json
 from Textbutton import TButton
 from function import *
 from equipment import *

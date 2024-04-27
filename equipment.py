@@ -102,7 +102,7 @@ def print_weapon_hash():
 # 武器排序以及保存
 def sort_weapon():
     global weapons
-    weapons.sort(key=lambda x: x.damage, reverse=True)
+    weapons.sort(key=lambda x: (x.name, x.damage), reverse=True)
     for i in weapons:
         i.img = None
     # 将 weapons 列表保存到文件中
@@ -167,7 +167,7 @@ def armor_random_rate(i, luck):
 # 防具排序以及保存
 def sort_armor():
     global armors
-    armors.sort(key=lambda x: x.defense, reverse=True)
+    armors.sort(key=lambda x: (x.name, x.defense), reverse=True)
     for i in armors:
         i.img = None
     # 将 armors 列表保存到文件中
@@ -250,7 +250,7 @@ jewelry_defense = [10, 10, 10, 10, 10, 10]
 # 首饰排序以及保存
 def sort_jewelry():
     global jewelrys
-    jewelrys.sort(key=lambda x: x.hp, reverse=True)
+    jewelrys.sort(key=lambda x: (x.name, x.hp), reverse=True)
     # 将 jewelrys 类的图像清除后保存
     for i in jewelrys:
         i.img = None
@@ -415,6 +415,11 @@ def update_chest(dropped_items):
 
 
 item_list = generate_item()
+
+"""
+for i in range(len(item_list)):
+    item_add(i, 10)
+"""
 
 drops = item_drop(50)
 print(drops)
