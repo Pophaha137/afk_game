@@ -90,6 +90,9 @@ def print_info(surface, page, position_id):
                 text = f"{key}: {value}"
                 print_text(surface, text, x, y, size, (0, 0, 0))
                 y += 20  # 更新y坐标以便下一个文本在新的一行
+
+EVENT1 = pygame.USEREVENT
+pygame.time.set_timer(EVENT1, 1000)
 def chest(surface):
     mx, my = 0, 0
     page = 0
@@ -102,6 +105,7 @@ def chest(surface):
     crossN = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossN.png"), (50, 50))
     crossD = pygame.transform.scale(pygame.image.load("./resource/background/Error/crossD.png"), (50, 50))
     pakage = pygame.transform.scale(pygame.image.load("./resource/character/inventory.png"), (1080, 600))
+
 
     # 背包物品展示
     select_position_id = -1  # 选中的物品的索引
@@ -144,6 +148,8 @@ def chest(surface):
                         generate_weapon(0, 10)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
+            elif event.type == EVENT1:
+                pygame.display.update()
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(500, 600, 100, 100), 2)
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(600, 600, 100, 100), 2)
 
@@ -162,7 +168,7 @@ def chest(surface):
         print_info(screen, page, position_id(mx, my))
         print_num(screen)
         pygame.display.flip()
-        clock.tick(120)
+        clock.tick(60)
 
 
 pygame.init()
