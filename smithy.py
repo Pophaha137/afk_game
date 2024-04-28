@@ -3,6 +3,7 @@ from Textbutton import TButton
 from function import *
 from forge import *
 from equipment import *
+from character_func import *
 
 page = 0
 selected_id = -1
@@ -13,7 +14,7 @@ def get_position_id(mx, my):
     count = 0
     for i in range(24):
         if x < mx < x + 60 and y < my < y + 60:
-            print (i)
+            #print (i)
             return i
         x += 100
         count += 1
@@ -21,7 +22,7 @@ def get_position_id(mx, my):
             x = 807
             y += 100
             count = 0
-    print(-1)
+    #print(-1)
     return -1
 
 def print_text(surface, text, x, y, font_size, color):
@@ -175,7 +176,7 @@ def get_selected_id(mx, my, page=0):
     count = 0
     for i in range(24):
         if x < mx < x + 60 and y < my < y + 60:
-            print (i)
+            #print (i)
             if i + page * 24 == selected_id:
                 selected_id = -1
             else:
@@ -206,7 +207,7 @@ def print_img(surface, page=0):
             count = 0  # 重置当前行的物品数量
 
 def generate_equipment(self):
-    generate_item(0, page)
+    generate_item(player.show_luck(), page)
 
 def smithy(surface):
 

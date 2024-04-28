@@ -422,10 +422,10 @@ for i in range(len(item_list)):
 """
 
 drops = item_drop(50)
-print(drops)
+#print(drops)
 update_chest(drops)
 
-print_item_list()
+#print_item_list()
 """
 #武器测试
 
