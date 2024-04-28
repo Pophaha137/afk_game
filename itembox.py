@@ -93,11 +93,7 @@ def print_info(surface, page, position_id):
                 print_text(surface, text, x, y, size, (0, 0, 0))
                 y += 20  # 更新y坐标以便下一个文本在新的一行
 
-<<<<<<< HEAD
-=======
-EVENT1 = pygame.USEREVENT
-pygame.time.set_timer(EVENT1, 1000)
->>>>>>> c3a580ed5e9a5a1984c33f5bf7ccf1651857f836
+
 def chest(surface):
     mx, my = 0, 0
     page = 0
@@ -142,8 +138,7 @@ def chest(surface):
                         generate_weapon(0, 10)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
-            elif event.type == EVENT1:
-                pygame.display.update()
+            
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(500, 600, 100, 100), 2)
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(600, 600, 100, 100), 2)
 
