@@ -4,8 +4,6 @@ from function import *
 from equipment import *
 
 
-
-
 def print_img(surface, print_page, page=0):
     items_per_page = 30  # 每页的物品数量
     items_per_row = 6  # 每行的物品数量
@@ -145,6 +143,7 @@ def print_info(surface, print_page, page, position_id, selected_id):
                     print_text(surface, text, x, y, size, (0, 0, 0))
                     y += 20  # 更新y坐标以便下一个文本在新的一行
 
+
 def get_selected_id(mx, my, selected_id):
     global current_page, print_page
     x = 368
@@ -193,6 +192,7 @@ def get_selected_id(mx, my, selected_id):
                 count = 0
         return selected_id
 
+
 def highlight_selected_item(surface, mx, my, selected_id, current_page):
     x = 368
     y = 42
@@ -207,8 +207,7 @@ def highlight_selected_item(surface, mx, my, selected_id, current_page):
     if c_page != current_page:
         return
     else:
-        pygame.draw.rect(surface, (255,255,255), (x, y, 89, 91), 2)
-
+        pygame.draw.rect(surface, (255, 255, 255), (x, y, 89, 91), 2)
 
 
 def page_change_click(self):
@@ -228,6 +227,7 @@ def page_change_box(self):
     if print_page != 0:
         pass
 
+
 def rotate_to_right(self):
     global print_page, current_page, selected_id
     print_page += 1
@@ -235,6 +235,8 @@ def rotate_to_right(self):
     selected_id = -1
     if print_page == 3:
         print_page = 0
+
+
 def rotate_to_left(self):
     global print_page, current_page, selected_id
     print_page -= 1
@@ -242,11 +244,12 @@ def rotate_to_left(self):
     selected_id = -1
     if print_page == -1:
         print_page = 2
+
+
 def delete_equipment(mx, my, selected_id):
     global print_page
     global current_page
-    
-    
+
     if selected_id == -1:
         return
     if print_page == 0:
@@ -263,15 +266,21 @@ def delete_equipment(mx, my, selected_id):
         if len(jewelrys) > 0:
             delete_jewelry(get_selected_id(mx, my, selected_id))
 
+
 def delete_func(self):
     global mx, my, selected_id
     delete_equipment(mx, my, selected_id)
     selected_id = -1
-    
+
+
 current_page = 0
 print_page = 0
 mx, my = 0, 0
 selected_id = -1
+
+
+def equip_func(self):
+    print("wear stuff")
 
 
 def backpack(surface):
@@ -295,10 +304,16 @@ def backpack(surface):
     rightD_page = pygame.transform.scale(pygame.image.load("./resource/background/button/rightD.png"), (100, 100))
     deleteN = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteN.png"), (200, 50))
     deleteD = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteD.png"), (200, 50))
-    rotate_rightN = pygame.transform.scale(pygame.image.load("./resource/background/button/rotate_rightN.png"), (100, 100))
-    rotate_rightD = pygame.transform.scale(pygame.image.load("./resource/background/button/rotata_rightD.png"), (100, 100))
-    rotate_leftN = pygame.transform.scale(pygame.image.load("./resource/background/button/rotate_leftN.png"), (100, 100))
-    rotate_leftD = pygame.transform.scale(pygame.image.load("./resource/background/button/rotata_leftD.png"), (100, 100))
+    equipN = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteN.png"), (200, 50))
+    equipD = pygame.transform.scale(pygame.image.load("./resource/background/button/deleteD.png"), (200, 50))
+    rotate_rightN = pygame.transform.scale(pygame.image.load("./resource/background/button/rotate_rightN.png"),
+                                           (100, 100))
+    rotate_rightD = pygame.transform.scale(pygame.image.load("./resource/background/button/rotata_rightD.png"),
+                                           (100, 100))
+    rotate_leftN = pygame.transform.scale(pygame.image.load("./resource/background/button/rotate_leftN.png"),
+                                          (100, 100))
+    rotate_leftD = pygame.transform.scale(pygame.image.load("./resource/background/button/rotata_leftD.png"),
+                                          (100, 100))
     # 背包物品展示
     print_page = 0  # 前选择页数当
 
@@ -307,6 +322,7 @@ def backpack(surface):
     left = TButton(970, 70, " ", left_page, left_page, leftD_page, page_change_click, font, (0, 0, 0))
     right = TButton(970, 210, " ", right_page, right_page, rightD_page, page_change_plus, font, (0, 0, 0))
     delete = TButton(80, 450, "Delete", deleteN, deleteN, deleteD, delete_func, page_font, (0, 0, 0))
+    equip = TButton(80, 350, "Equip", equipN, equipN, equipD, equip_func, page_font, (0, 0, 0))
     rotate_right = TButton(970, 335, " ", rotate_rightN, rotate_rightN, rotate_rightD, rotate_to_right, font, (0, 0, 0))
     rotate_left = TButton(970, 465, " ", rotate_leftN, rotate_leftN, rotate_leftD, rotate_to_left, font, (0, 0, 0))
     running = True
@@ -325,16 +341,18 @@ def backpack(surface):
                 left.getFocus(mx, my)
                 right.getFocus(mx, my)
                 delete.getFocus(mx, my)
-                rotate_right.getFocus(mx,my)
-                rotate_left.getFocus(mx,my)
+                equip.getFocus(mx, my)
+                rotate_right.getFocus(mx, my)
+                rotate_left.getFocus(mx, my)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     esc.mouseDown(mx, my)
                     left.mouseDown(mx, my)
                     right.mouseDown(mx, my)
                     delete.mouseDown(mx, my)
-                    rotate_right.mouseDown(mx,my)
-                    rotate_left.mouseDown(mx,my)
+                    equip.mouseDown(mx, my)
+                    rotate_right.mouseDown(mx, my)
+                    rotate_left.mouseDown(mx, my)
                     selected_id = get_selected_id(mx, my, selected_id)
 
             elif event.type == pygame.MOUSEBUTTONUP:
@@ -342,12 +360,12 @@ def backpack(surface):
                 left.mouseUp(mx, my)
                 right.mouseUp(mx, my)
                 delete.mouseUp(mx, my)
+                equip.mouseUp(mx, my)
                 rotate_right.mouseUp(mx, my)
                 rotate_left.mouseUp(mx, my)
 
             elif event.type == EVENT1:
                 pygame.display.update()
-
 
         surface.blit(pakage, (0, 0))
 
@@ -361,6 +379,7 @@ def backpack(surface):
         left.draw(screen)
         right.draw(screen)
         delete.draw(screen)
+        equip.draw(screen)
         rotate_right.draw(screen)
         rotate_left.draw(screen)
         print_img(screen, print_page, current_page)
