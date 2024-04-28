@@ -88,7 +88,7 @@ print_jewelry_hash()
 """
 
 #plyaer.show()
-
+"""
 
 generate_enemy(0, 1)
 generate_enemy(1, 2)
@@ -104,4 +104,5 @@ fight(player, enemy[0])
 fight(player, enemy[0])
 
 player.show_all()
+"""
 save_player()

@@ -2,6 +2,7 @@ import pygame
 from Textbutton import TButton
 from function import *
 from equipment import *
+from character_func import *
 
 
 def print_img(surface, print_page, page=0):
@@ -55,7 +56,7 @@ def position_id(mx, my):
 
 
 def print_text(surface, text, x, y, font_size, color):
-    font = pygame.font.Font(None, font_size)
+    font = pygame.font.Font('VonwaonBitmap-12px.ttf', font_size)
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
     text_rect.topleft = (x, y)  # 设置文本矩形的左上角坐标
@@ -75,7 +76,7 @@ def print_title(surface, print_page):
 
 
 def print_info(surface, print_page, page, position_id, selected_id):
-    size = 26
+    size = 14
     x = 45
     y = 150
     if selected_id != -1:
@@ -278,9 +279,64 @@ print_page = 0
 mx, my = 0, 0
 selected_id = -1
 
+def print_equipfunc():
+    global print_page, selected_id
+    font_size = 25
+    if selected_id == -1:
+        print_text(screen, "Equip", 140, 360, font_size, (0, 0, 0))
+    else:
+        if print_page == 0:
+            weapons = load_items_from_file("weapons.pkl")
+            if len(weapons) > selected_id:
+                if player.weapon_id != weapons[selected_id].id:
+                    print_text(screen, "Equip", 140, 360, font_size, (0, 0, 0))
+                elif player.weapon_id == weapons[selected_id].id:
+                    print_text(screen, "Unequip", 120, 360, font_size, (0, 0, 0))
+        elif print_page == 1:
+            armors = load_items_from_file("armors.pkl")
+            if len(armors) > selected_id:
+                if player.armor_id != armors[selected_id].id:
+                    print_text(screen, "Equip", 140, 360, font_size, (0, 0, 0))
+                elif player.armor_id == armors[selected_id].id:
+                    print_text(screen, "Unequip", 120, 360, font_size, (0, 0, 0))
+        elif print_page == 2:
+            jewelrys = load_items_from_file("jewelrys.pkl")
+            if len(jewelrys) > selected_id:
+                if player.jewelry_id != jewelrys[selected_id].id:
+                    print_text(screen, "Equip", 140, 360, font_size, (0, 0, 0))
+                elif player.jewelry_id == jewelrys[selected_id].id:
+                    print_text(screen, "Unequip", 120, 360, font_size, (0, 0, 0))
+    
+
 
 def equip_func(self):
-    print("wear stuff")
+    global print_page, selected_id, player
+    if selected_id == -1:
+        return
+    if print_page == 0:
+        weapons = load_items_from_file("weapons.pkl")
+        if len(weapons) > selected_id:
+            if player.weapon_id != weapons[selected_id].id:
+                player.weapon_on(weapons[selected_id])
+            elif player.weapon_id == weapons[selected_id].id:
+                player.weapon_off()
+    elif print_page == 1:
+        armors = load_items_from_file("armors.pkl")
+        if len(armors) > selected_id:
+            if player.armor_id != armors[selected_id].id:
+                player.armor_on(armors[selected_id])
+            elif player.armor_id == armors[selected_id].id:
+                player.armor_off()
+    elif print_page == 2:
+        jewelrys = load_items_from_file("jewelrys.pkl")
+        if len(jewelrys) > selected_id:
+            if player.jewelry_id != jewelrys[selected_id].id:
+                player.jewelry_on(jewelrys[selected_id])
+            elif player.jewelry_id == jewelrys[selected_id].id:
+                player.jewelry_off()
+    player.show()
+    save_player()
+    
 
 
 def backpack(surface):
@@ -322,7 +378,7 @@ def backpack(surface):
     left = TButton(970, 70, " ", left_page, left_page, leftD_page, page_change_click, font, (0, 0, 0))
     right = TButton(970, 210, " ", right_page, right_page, rightD_page, page_change_plus, font, (0, 0, 0))
     delete = TButton(80, 450, "Delete", deleteN, deleteN, deleteD, delete_func, page_font, (0, 0, 0))
-    equip = TButton(80, 350, "Equip", equipN, equipN, equipD, equip_func, page_font, (0, 0, 0))
+    equip = TButton(80, 350, "", equipN, equipN, equipD, equip_func, page_font, (0, 0, 0))
     rotate_right = TButton(970, 335, " ", rotate_rightN, rotate_rightN, rotate_rightD, rotate_to_right, font, (0, 0, 0))
     rotate_left = TButton(970, 465, " ", rotate_leftN, rotate_leftN, rotate_leftD, rotate_to_left, font, (0, 0, 0))
     running = True
@@ -374,7 +430,7 @@ def backpack(surface):
         page_num_text = page_font.render(f'Page {current_page}', True, (255, 255, 255))
         text_rect = page_num_text.get_rect(center=(rect_x + rect_width / 2, rect_y + rect_height / 2))
         surface.blit(page_num_text, text_rect)
-
+        load_player()
         esc.draw(screen)
         left.draw(screen)
         right.draw(screen)
@@ -386,6 +442,7 @@ def backpack(surface):
         print_title(screen, print_page)
         print_info(screen, print_page, current_page, position_id(mx, my), selected_id)
         highlight_selected_item(screen, mx, my, selected_id, current_page)
+        print_equipfunc()
         pygame.display.flip()
         clock.tick(60)
 
