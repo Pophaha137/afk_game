@@ -6,7 +6,7 @@ pygame.init()
 
 
 EVENT = pygame.USEREVENT + 1
-pygame.time.set_timer(EVENT,10000)
+pygame.time.set_timer(EVENT,1000)
 
 def smallgui(surface):
 
