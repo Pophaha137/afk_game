@@ -21,7 +21,8 @@ def smallgui(surface):
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == EVENT:
-                i =i+1
+                if i <= 7:
+                    i =i+1
         screen.fill((255,255,255))
         screen.blit(combatants_bar,(50,0))
         screen.blit(synthesis_bar,(50,50))
