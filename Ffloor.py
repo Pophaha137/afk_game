@@ -2,6 +2,7 @@ import pygame
 import sys
 from Textbutton import TButton
 from function import *
+from character import *
 pygame.init()
 EVENT1 = pygame.USEREVENT
 pygame.time.set_timer(EVENT1, 1000)
@@ -9,6 +10,14 @@ pygame.time.set_timer(EVENT1, 1000)
 def go_gui(screen):
     from smallgui import smallgui
     smallgui(screen)
+def go_fight(screen):
+    generate_enemy(0,1)
+    generate_enemy(1,2)
+    generate_enemy(2,3)
+    generate_enemy(3,3)
+    generate_enemy(4,3)
+    fight(player,enemy[0])
+    screen.update()
 def FirstFloor(surface):
     global state
     from backpack import backpack
@@ -35,7 +44,7 @@ def FirstFloor(surface):
     crucible = TButton(0, 100," ", cruciblei, cruciblei, None,synthesis, font,(0,0,0))
     forge = TButton(w/3*2, 0," ", forgei, forgei, None, smithy, font, (0,0,0))
     head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
-    door = TButton(500, h-200, " ", doori, doori, None, None,font, (0,0,0))
+    door = TButton(500, h-200, " ", doori, doori, None, go_fight,font, (0,0,0))
     stairs = TButton(w-150, h-200, " ", stairsi, stairsi, None, SecondFloor,font, (0,0,0))
     go_to_gui = TButton(w-350, h-50, "Small", bExitN, bExitM,bExitD,go_gui,small_font, (255,255,255))
 
