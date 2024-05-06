@@ -46,7 +46,6 @@ def SecondFloor(surface):
             head.draw(surface)
             box.draw(surface)
             stairs.draw(surface)
-            surface.blit(bloodi,(100,h-100))
         pygame.display.flip()
 
 screen = pygame.display.set_mode((1280, 800))

@@ -12,6 +12,12 @@ def go_Ffloor(screen):
 EVENT = pygame.USEREVENT
 pygame.time.set_timer(EVENT,1000)
 def smallgui(surface):
+    user_screen = ctypes.windll.user32
+    screensize = user_screen.GetSystemMetrics(0), user_screen.GetSystemMetrics(1)
+    x = screensize[0] - 200
+    y = screensize[1] - 200
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x, y)
+    screen = pygame.display.set_mode((200, 150), pygame.NOFRAME)
     running = True
     i= 1
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
@@ -46,11 +52,6 @@ def smallgui(surface):
     pygame.quit()
 
 
-user_screen = ctypes.windll.user32
-screensize = user_screen.GetSystemMetrics(0), user_screen.GetSystemMetrics(1)
-x = screensize[0]-200
-y = screensize[1]-200
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d"%(x,y)
-screen = pygame.display.set_mode((200,150),pygame.NOFRAME)
+
 if __name__ == '__main__':
     smallgui(screen)

@@ -21,6 +21,7 @@ def go_fight(screen):
     fight(player,enemy[0])
     return screen
 def FirstFloor(surface):
+    screen = pygame.display.set_mode((1280, 800))
     global state
     from backpack import backpack
     from smithy import smithy
@@ -87,10 +88,9 @@ def FirstFloor(surface):
             door.draw(surface)
             stairs.draw(surface)
             go_to_gui.draw(surface)
-            surface.blit(bloodi,(100,h-100))
         pygame.display.flip()
 
-screen = pygame.display.set_mode((1280, 800))
+
 if __name__ == '__main__':
 
     FirstFloor(screen)
