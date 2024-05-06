@@ -16,6 +16,7 @@ pygame.display.set_caption("Adventurer Simulator")
 font = pygame.font.Font("./VonwaonBitmap-12px.ttf",80)
 def Surface(surface):
     global w,h,state
+    check_player()
     state = "start"
     #Text
     surTitle = font.render("Adventurer Simulator",True,(0,0,0))

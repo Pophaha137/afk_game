@@ -3,21 +3,23 @@ import sys
 from Textbutton import TButton
 from function import *
 from character import *
+from character_func import load_player,save_player
 pygame.init()
 EVENT1 = pygame.USEREVENT
 pygame.time.set_timer(EVENT1, 1000)
-
+player = load_player()
 def go_gui(screen):
     from smallgui import smallgui
     smallgui(screen)
 def go_fight(screen):
+    global player
     generate_enemy(0,1)
     generate_enemy(1,2)
     generate_enemy(2,3)
     generate_enemy(3,3)
     generate_enemy(4,3)
     fight(player,enemy[0])
-    screen.update()
+    return screen
 def FirstFloor(surface):
     global state
     from backpack import backpack
