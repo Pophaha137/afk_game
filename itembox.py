@@ -5,7 +5,7 @@ from equipment import *
 from class_define import *
 
 
-def print_img(surface, page=0):
+def print_img(surface, print_page, page=0):
     items_per_page = 30  # 每页的物品数量
     items_per_row = 6  # 每行的物品数量
     start_index = items_per_page * page  # 开始的索引
@@ -45,14 +45,12 @@ def position_id(mx, my):
     # print(-1)
     return -1
 
-def print_num(surface, page=0):
-    for i in range(page * 30, page * 30 + 30):
+def print_num(surface):
+    for i in range(30):
         x = 430
         y = 120
         count = 0
         item = load_items_from_file("item_list.pkl")
-        if i > len(item) - 1:
-            break
         for i in item:
             print_text(surface, str(i.show_number()) , x, y, 25, (255,255,255))
             x += 100
@@ -93,7 +91,8 @@ def print_info(surface, page, position_id):
                 print_text(surface, text, x, y, size, (0, 0, 0))
                 y += 20  # 更新y坐标以便下一个文本在新的一行
 
-
+EVENT1 = pygame.USEREVENT
+pygame.time.set_timer(EVENT1, 1000)
 def chest(surface):
     mx, my = 0, 0
     page = 0
@@ -109,7 +108,8 @@ def chest(surface):
 
 
     # 背包物品展示
-    
+    select_position_id = -1  # 选中的物品的索引
+    print_page = 0  # 当前选择页数
 
     # button
     esc = TButton(1230, 0, " ", crossN, crossN, crossD, SecondFloor, font, (0, 0, 0))
@@ -133,12 +133,23 @@ def chest(surface):
                     elif 600 < mx < 700 and 600 < my < 700:
                         if page <= 18:
                             page += 1
+                    elif 900 < mx < 1000 and 600 < my < 700:
+                        if print_page != 0:
+                            print_page -= 1
+                            page = 0
+
+                    elif 1000 < mx < 1100 and 600 < my < 700:
+                        print_page += 1
+                        if print_page == 3:
+                            print_page = 0
+                            page = 0
 
                     else:
                         generate_weapon(0, 10)
             elif event.type == pygame.MOUSEBUTTONUP:
                 esc.mouseUp(mx, my)
-            
+            elif event.type == EVENT1:
+                pygame.display.update()
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(500, 600, 100, 100), 2)
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(600, 600, 100, 100), 2)
 
@@ -152,10 +163,10 @@ def chest(surface):
         surface.blit(page_num_text, text_rect)
 
         esc.draw(screen)
-        print_img(screen, page)
+        print_img(screen, print_page, page)
         print_title(screen)
         print_info(screen, page, position_id(mx, my))
-        print_num(screen, page)
+        print_num(screen)
         pygame.display.flip()
         clock.tick(60)
 

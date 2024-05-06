@@ -2,6 +2,13 @@ import pygame
 import sys
 from Textbutton import TButton
 from function import *
+pygame.init()
+EVENT1 = pygame.USEREVENT
+pygame.time.set_timer(EVENT1, 1000)
+
+def go_gui(screen):
+    from smallgui import smallgui
+    smallgui(screen)
 def FirstFloor(surface):
     global state
     from backpack import backpack
@@ -13,6 +20,7 @@ def FirstFloor(surface):
     w=1280
     h=800
     font = pygame.font.Font("./VonwaonBitmap-12px.ttf", 80)
+    small_font = pygame.font.Font("./VonwaonBitmap-12px.ttf",20)
     #image import
     cruciblei = pygame.transform.scale(pygame.image.load("./resource/function/AlchemyPot.png").convert_alpha(),(200,200))
     forgei = pygame.transform.scale(pygame.image.load("./resource/function/Blacksmith.png").convert_alpha(),(200,200))
@@ -20,13 +28,16 @@ def FirstFloor(surface):
     headi = pygame.transform.scale(pygame.image.load("./resource/character/backpack.png").convert_alpha(),(150,150))
     doori = pygame.transform.scale(pygame.image.load("./resource/character/AdventureDoor.png").convert_alpha(),(200,200))
     stairsi = pygame.transform.scale(pygame.image.load("./resource/character/stair.png").convert_alpha(),(150,200))
-
+    bExitD = pygame.transform.scale(pygame.image.load("./resource/background/bExitD.png").convert_alpha(),(150,50))
+    bExitM = pygame.transform.scale(pygame.image.load("./resource/background/bExitM.png").convert_alpha(),(150,50))
+    bExitN = pygame.transform.scale(pygame.image.load("./resource/background/bExitN.png").convert_alpha(),(150,50))
     #button
     crucible = TButton(0, 100," ", cruciblei, cruciblei, None,synthesis, font,(0,0,0))
     forge = TButton(w/3*2, 0," ", forgei, forgei, None, smithy, font, (0,0,0))
     head = TButton(0, h-150," ", headi, headi, None, backpack, font, (0,0,0))
     door = TButton(500, h-200, " ", doori, doori, None, None,font, (0,0,0))
     stairs = TButton(w-150, h-200, " ", stairsi, stairsi, None, SecondFloor,font, (0,0,0))
+    go_to_gui = TButton(w-350, h-50, "Small", bExitN, bExitM,bExitD,go_gui,small_font, (255,255,255))
 
     running = True
     while running:
@@ -40,6 +51,7 @@ def FirstFloor(surface):
                 head.getFocus(mx,my)
                 door.getFocus(mx,my)
                 stairs.getFocus(mx,my)
+                go_to_gui.getFocus(mx,my)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed() == (1,0,0):
                     crucible.mouseDown(mx,my)
@@ -47,18 +59,23 @@ def FirstFloor(surface):
                     head.mouseDown(mx,my)
                     door.mouseDown(mx,my)
                     stairs.mouseDown(mx,my)
+                    go_to_gui.mouseDown(mx,my)
             elif event.type == pygame.MOUSEBUTTONUP:
                 crucible.mouseUp(mx,my)
                 forge.mouseUp(mx,my)
                 head.mouseUp(mx,my)
                 door.mouseUp(mx,my)
                 stairs.mouseUp(mx,my)
+                go_to_gui.mouseUp(mx,my)
+            elif event.type == EVENT1:
+                pygame.display.update()
             surface.fill((255,255,255))
             crucible.draw(surface)
             forge.draw(surface)
             head.draw(surface)
             door.draw(surface)
             stairs.draw(surface)
+            go_to_gui.draw(surface)
             surface.blit(bloodi,(100,h-100))
         pygame.display.flip()
 

@@ -256,8 +256,9 @@ def delete_equipment(mx, my, selected_id):
     if print_page == 0:
         weapons = load_items_from_file("weapons.pkl")
         if len(weapons) > 0:
-            delete_weapon(get_selected_id(mx, my, selected_id))
-            print("weapon deleted")
+            if player.weapon_id != weapons[selected_id].id:
+                delete_weapon(get_selected_id(mx, my, selected_id))
+                print("weapon deleted")
     elif print_page == 1:
         armors = load_items_from_file("armors.pkl")
         if len(armors) > 0:
